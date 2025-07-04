@@ -1,109 +1,68 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Quản lý phí vận chuyển</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Phí vận chuyển</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Thêm phí vận chuyển</a></li>
-                            </ul>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Phí vận chuyển</li>
+            <li class="breadcrumb-item active" aria-current="page">Thêm phí vận chuyển</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Thêm mới phí vận chuyển</h5>
+                </div>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <form id="myForm" action="" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="city" class="form-label">Chọn thành phố <span class="text-danger">*</span></label>
+                            <select name="city" id="city" class="form-select choose city" required>
+                                <option value="">--Chọn tỉnh thành phố--</option>
+                                @foreach($city as $ci)
+                                    <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="province" class="form-label">Chọn Quận Huyện <span class="text-danger">*</span></label>
+                            <select name="province" id="province" class="form-select province choose" required>
+                                <option value="">--Chọn quận huyện--</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="wards" class="form-label">Chọn Xã Phường <span class="text-danger">*</span></label>
+                            <select name="wards" id="wards" class="form-select wards" required>
+                                <option value="">--Chọn xã phường--</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fee_ship" class="form-label">Phí vận chuyển <span class="text-danger">*</span></label>
+                            <input type="number" name="fee_ship" class="form-control fee_ship" id="fee_ship" placeholder="Nhập phí vận chuyển" required/>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" name="add_delivery" class="btn btn-info add_delivery">
+                                <i class="bi bi-plus-circle me-1"></i>Thêm phí vận chuyển
+                            </button>
+                            <a href="/admin/fee/all_fee" class="btn btn-outline-secondary">Huỷ</a>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Thêm mới phí vận chuyển</h5>
-                        </div>
-                        <div class="card-body">
-                            @include('backend.components.notification')
-                            <form id="myForm" action="" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="city">Chọn thành phố</label>
-                                            <select name="city" id="city" class="form-control input-sm m-bot15 choose city">
-                                                <option value="">--Chọn tỉnh thành phố--</option>
-                                                @foreach($city as $key => $ci)
-                                                    <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
-                                                @endforeach
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="province">Chọn Quận Huyện</label>
-                                            <select name="province" id="province"
-                                                    class="form-control input-sm m-bot15 province choose">
-                                                <option value="">--Chọn quận huyện--</option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="wards">Chọn Xã Phường</label>
-                                            <select name="wards" id="wards" class="form-control input-sm m-bot15 wards">
-                                                <option value="">--Chọn xã phường--</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="wards">Phí vận chuyển</label>
-                                            <input type="text" name="fee_ship" class="form-control fee_ship" id="exampleInputEmail1"
-                                                   placeholder="Tên danh mục">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <button type="button" name="add_delivery" class="btn btn-info add_delivery mt-2">Thêm phí
-                                                vận
-                                                chuyển
-                                            </button>
-                                            <a href="/admin/fee/all_fee" class="btn btn-default">Huỷ</a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- [ form-element ] start -->
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Danh sách phí vận chuyển</h5>
-                        </div>
-                        <div class="card-body">
-                            <div id="load_delivery">
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- [ Main Content ] end -->
-
         </div>
-    </section>
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">Danh sách phí vận chuyển</h5>
+                </div>
+                <div class="card-body">
+                    <div id="load_delivery"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
     <script type="text/javascript">
@@ -123,7 +82,6 @@
             }
 
             $(document).on('blur', '.fee_feeship_edit', function () {
-
                 var feeship_id = $(this).data('feeship_id');
                 var fee_value = $(this).text();
                 var _token = $('input[name="_token"]').val();
@@ -136,19 +94,20 @@
                         fetch_delivery();
                     }
                 });
-
             });
-            $('.add_delivery').click(function () {
 
+            $('.add_delivery').click(function () {
                 var city = $('.city').val();
                 var province = $('.province').val();
                 var wards = $('.wards').val();
                 var fee_ship = $('.fee_ship').val();
                 var _token = $('input[name="_token"]').val();
-                // alert(city);
-                // alert(province);
-                // alert(wards);
-                // alert(fee_ship);
+
+                if (!city || !province || !wards || !fee_ship) {
+                    toastr["error"]("Vui lòng điền đầy đủ thông tin");
+                    return false;
+                }
+
                 $.ajax({
                     url: '{{url('/insert-delivery')}}',
                     method: 'POST',
@@ -156,19 +115,16 @@
                     success: function (data) {
                         fetch_delivery();
                         clearForm();
+                        toastr["success"]("Thêm phí vận chuyển thành công");
                     }
                 });
-
-
             });
+
             $('.choose').on('change', function () {
                 var action = $(this).attr('id');
                 var ma_id = $(this).val();
                 var _token = $('input[name="_token"]').val();
                 var result = '';
-                // alert(action);
-                //  alert(matp);
-                //   alert(_token);
 
                 if (action == 'city') {
                     result = 'province';
@@ -187,9 +143,7 @@
         })
 
         function clearForm() {
-            // Làm sạch các ô input trong form
             $('#myForm')[0].reset();
         }
-
     </script>
 @endsection

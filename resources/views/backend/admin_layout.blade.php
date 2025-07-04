@@ -1,285 +1,736 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
-    <title>{{$title}}</title>
-    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 11]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <!-- Meta -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content="">
-    <meta name="author" content="Phoenixcoded"/>
-    <!-- Favicon icon -->
-    <link rel="icon" href="{{asset('backend/assets/images/favicon.ico')}}" type="image/x-icon">
-
-    <!-- vendor css -->
-    <link rel="stylesheet" href="{{asset('backend/assets/css/style.css')}}">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"
-          integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{$title ?? 'Admin Dashboard'}} - Bán Nước Giặt</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- Custom CSS -->
     <style>
-        .ck-editor__editable_inline {
-            min-height: 200px; /* hoặc 400px tùy bạn */
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #0dcaf0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .sidebar-header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            height: calc(100vh - var(--header-height) - 100px);
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .nav-caption {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submenu {
+            padding-left: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .submenu .nav-link {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+        }
+
+        .header.sidebar-collapsed {
+            left: 70px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid var(--light-color);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 0.5rem 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            border: none;
+            padding: 1.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-card .icon {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        .stats-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .stats-card .label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            border: none;
+            padding: 1.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-card .icon {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+
+        .stats-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .stats-card .label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="">
-<div class="loader-bg">
-    <div class="loader-track">
-        <div class="loader-fill"></div>
+<body>
+    <!-- Loading -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
     </div>
-</div>
-<nav class="pcoded-navbar  ">
-    <div class="navbar-wrapper  ">
-        <div class="navbar-content scroll-div ">
 
-            <div class="">
-                @php
-                    // $name = Auth::user('name');
-                    $name = Auth::user()->name;
-                @endphp
-                <div class="main-menu-header">
-                    <img class="img-radius" src="{{asset('backend/assets/images/user/avatar-2.jpg')}}"
-                         alt="User-Profile-Image">
-                    <div class="user-details">
-                        <span>{{$name}}</span>
-                        <div id="more-details">Chi tiết<i class="fa fa-chevron-down m-l-5"></i></div>
-                    </div>
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="{{route('dashboard')}}" class="logo">
+                <img src="{{asset('upload/info/logo.png')}}" alt="Logo">
+                <span class="logo-text">Admin Panel</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-caption">Cửa hàng</div>
+            
+            <div class="nav-item">
+                <a href="{{route('dashboard')}}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="{{route('add_infomation')}}" class="nav-link {{ request()->routeIs('add_infomation') ? 'active' : '' }}">
+                    <i class="bi bi-gear"></i>
+                    <span>Cấu hình website</span>
+                </a>
+            </div>
+
+            @if(auth()->user()->hasAnyRoles(['admin', 'user']))
+            <div class="nav-caption">Quản lý sản phẩm</div>
+            
+            <div class="nav-item">
+                <a href="{{route('all_category')}}" class="nav-link {{ request()->routeIs('all_category') ? 'active' : '' }}">
+                    <i class="bi bi-tags"></i>
+                    <span>Danh mục sản phẩm</span>
+                </a>
+                @hasrole('admin')
+                <div class="submenu">
+                    <a href="{{route('add_category')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm danh mục</span>
+                    </a>
                 </div>
-                <div class="collapse" id="nav-user-link">
-                    <ul class="list-unstyled">
-                        <li class="list-group-item"><a href="{{route('logout')}}"><i
-                                    class="feather icon-log-out m-r-5"></i>Đăng xuất</a></li>
-                    </ul>
+                @endhasrole
+            </div>
+
+            <div class="nav-item">
+                <a href="{{route('all_brand')}}" class="nav-link {{ request()->routeIs('all_brand') ? 'active' : '' }}">
+                    <i class="bi bi-box"></i>
+                    <span>Thương hiệu</span>
+                </a>
+                @hasrole('admin')
+                <div class="submenu">
+                    <a href="{{route('add_brand')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm thương hiệu</span>
+                    </a>
+                </div>
+                @endhasrole
+            </div>
+
+            <div class="nav-item">
+                <a href="{{route('all_product')}}" class="nav-link {{ request()->routeIs('all_product') ? 'active' : '' }}">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Sản phẩm</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{route('add_product')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm sản phẩm</span>
+                    </a>
                 </div>
             </div>
 
-            <ul class="nav pcoded-inner-navbar ">
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Cửa hàng</label>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-home"></i></span><span
-                            class="pcoded-mtext">Trang chủ</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('add_infomation')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-settings"></i></span><span
-                            class="pcoded-mtext">Cấu hình website</span></a>
-                </li>
-                @if(auth()->user()->hasAnyRoles(['admin', 'user']))
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="javascript:void(0);" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-bookmark"></i></span><span
-                            class="pcoded-mtext">Danh mục sản phẩm</span></a>
-                    <ul class="pcoded-submenu">
-                        @hasrole('admin')
-                        <li><a href="{{route('add_category')}}">Thêm danh mục</a></li>
-                        @endhasrole
-                        <li><a href="{{route('all_category')}}">Danh sách danh mục</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-box"></i></span><span
-                            class="pcoded-mtext">Thương hiệu sản phẩm</span></a>
-                    <ul class="pcoded-submenu">
-                        @hasrole('admin')
-                        <li><a href="{{route('add_brand')}}">Thêm thương hiệu</a></li>
-                        @endhasrole
-                        <li><a href="{{route('all_brand')}}">Danh sách thương hiệu</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-book"></i></span><span
-                            class="pcoded-mtext">Quản lý sản phẩm</span></a>
-                    <ul class="pcoded-submenu">
-                        <li><a href="{{route('add_product')}}">Thêm sản phẩm</a></li>
-                        <li><a href="{{ route('all_product') }}">Danh sách sản phẩm</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('index_comment')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-map"></i></span><span
-                            class="pcoded-mtext">Quản lý nhận xét</span></a>
-                </li>
-                @endif
-                @if(auth()->user()->hasAnyRoles(['admin', 'user']))
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Quản lý</label>
-                </li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-cloud"></i></span><span
-                            class="pcoded-mtext">Quản lý mã giảm giá</span></a>
-                    <ul class="pcoded-submenu">
-                        <li><a href="{{route('add_coupon')}}">Thêm giảm giá</a></li>
-                        <li><a href="{{ route('all_coupon') }}">Danh sách giảm giá</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-activity"></i></span><span
-                            class="pcoded-mtext">Quản lý phí vận chuyển</span></a>
-                    <ul class="pcoded-submenu">
-                        <li><a href="{{route('add_fee')}}">Thêm phí vận chuyển</a></li>
-                        <li><a href="{{ route('all_fee') }}">Danh sách phí vận chuyển</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-image"></i></span><span class="pcoded-mtext">Quản lý slider</span></a>
-                    <ul class="pcoded-submenu">
-                        <li><a href="{{route('add_slider')}}">Thêm slider</a></li>
-                        <li><a href="{{ route('all_slider') }}">Danh sách slider</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('all_pages')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-package"></i></span><span
-                            class="pcoded-mtext">Quản lý trang</span></a>
-                </li>
-                @endif
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Bán hàng</label>
-                </li>
-                @if(auth()->user()->hasAnyRoles(['admin', 'user']))
-                <li class="nav-item">
-                    <a href="{{route('all_order')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-shopping-cart"></i></span><span
-                            class="pcoded-mtext">Danh sách đơn hàng</span></a>
-                </li>
-                @endif
-                @impersonate
-                <li class="nav-item">
-                    <a href="{{ route('impersonate_destroy') }}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-align-justify"></i></span><span
-                            class="pcoded-mtext">Stop chuyển quyền</span></a>
-                </li>
-                @endimpersonate
-                @hasrole('admin')
-                <li class="nav-item">
-                    <a href="{{route('all_user')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-user-check"></i></span><span
-                            class="pcoded-mtext">Quản lý tài khoản</span></a>
-                </li>
-                @endhasrole
-                @if(auth()->user()->hasAnyRoles(['admin', 'user']))
-                <li class="nav-item">
-                    <a href="{{route('all_customer')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-user"></i></span><span
-                            class="pcoded-mtext">Quản lý khách hàng</span></a>
-                </li>
-                @endif
-                @hasrole('author')
-                <li class="nav-item pcoded-menu-caption">
-                    <label>Bài viết</label>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('all_category_post')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-bookmark"></i></span><span
-                            class="pcoded-mtext">Danh mục bài viết</span></a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('all_post')}}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-folder"></i></span><span class="pcoded-mtext">Danh sách bài viết</span></a>
-                </li>
-                @endhasrole
+            <div class="nav-item">
+                <a href="{{route('index_comment')}}" class="nav-link {{ request()->routeIs('index_comment') ? 'active' : '' }}">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>Nhận xét</span>
+                </a>
+            </div>
+            @endif
 
-            </ul>
-
-        </div>
-    </div>
-</nav>
-<!-- [ navigation menu ] end -->
-<!-- [ Header ] start -->
-<header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark">
-
-
-    <div class="m-header">
-        <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
-        <a href="#!" class="b-brand">
-            <!-- ========   change your logo hear   ============ -->
-            <img src="{{asset('contact/logo.png')}}" alt="" class="logo">
-            <img src="{{asset('backend/assets/images/logo-icon.png')}}" alt="" class="logo-thumb">
-        </a>
-        <a href="#!" class="mob-toggler">
-            <i class="feather icon-more-vertical"></i>
-        </a>
-    </div>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav mr-auto">
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li>
-                <div class="dropdown drp-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="feather icon-user"></i>
+            @if(auth()->user()->hasAnyRoles(['admin', 'user']))
+            <div class="nav-caption">Quản lý hệ thống</div>
+            
+            <div class="nav-item">
+                <a href="{{route('all_coupon')}}" class="nav-link {{ request()->routeIs('all_coupon') ? 'active' : '' }}">
+                    <i class="bi bi-ticket-perforated"></i>
+                    <span>Mã giảm giá</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{route('add_coupon')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm mã giảm giá</span>
                     </a>
-
-                    <div class="dropdown-menu dropdown-menu-right profile-notification">
-                        <div class="pro-head">
-                            <img src="{{asset('backend/assets/images/user/avatar-1.jpg')}}" class="img-radius"
-                                 alt="User-Profile-Image">
-                            <span>{{$name}}</span>
-                            <a href="{{route('logout')}}" class="dud-logout" title="Logout">
-                                <i class="feather icon-log-out"></i>
-                            </a>
-                        </div>
-
-                    </div>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </div>
 
+            <div class="nav-item">
+                <a href="{{route('all_fee')}}" class="nav-link {{ request()->routeIs('all_fee') ? 'active' : '' }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Phí vận chuyển</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{route('add_fee')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm phí vận chuyển</span>
+                    </a>
+                </div>
+            </div>
 
-</header>
-<!-- Layout wrapper -->
-@yield('content')
+            <div class="nav-item">
+                <a href="{{route('all_slider')}}" class="nav-link {{ request()->routeIs('all_slider') ? 'active' : '' }}">
+                    <i class="bi bi-images"></i>
+                    <span>Slider</span>
+                </a>
+                <div class="submenu">
+                    <a href="{{route('add_slider')}}" class="nav-link">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Thêm slider</span>
+                    </a>
+                </div>
+            </div>
 
-<!-- / Layout wrapper -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-        crossOrigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"/>
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#ckeditor'))
-        .catch(error => {
-            console.error(error);
+            <div class="nav-item">
+                <a href="{{route('all_pages')}}" class="nav-link {{ request()->routeIs('all_pages') ? 'active' : '' }}">
+                    <i class="bi bi-file-text"></i>
+                    <span>Trang tĩnh</span>
+                </a>
+            </div>
+            @endif
+
+            <div class="nav-caption">Bán hàng</div>
+            
+            @if(auth()->user()->hasAnyRoles(['admin', 'user']))
+            <div class="nav-item">
+                <a href="{{route('all_order')}}" class="nav-link {{ request()->routeIs('all_order') ? 'active' : '' }}">
+                    <i class="bi bi-cart-check"></i>
+                    <span>Đơn hàng</span>
+                </a>
+            </div>
+            @endif
+
+            @impersonate
+            <div class="nav-item">
+                <a href="{{ route('impersonate_destroy') }}" class="nav-link">
+                    <i class="bi bi-person-x"></i>
+                    <span>Dừng chuyển quyền</span>
+                </a>
+            </div>
+            @endimpersonate
+
+            @hasrole('admin')
+            <div class="nav-item">
+                <a href="{{route('all_user')}}" class="nav-link {{ request()->routeIs('all_user') ? 'active' : '' }}">
+                    <i class="bi bi-people"></i>
+                    <span>Quản lý tài khoản</span>
+                </a>
+            </div>
+            @endhasrole
+
+            @if(auth()->user()->hasAnyRoles(['admin', 'user']))
+            <div class="nav-item">
+                <a href="{{route('all_customer')}}" class="nav-link {{ request()->routeIs('all_customer') ? 'active' : '' }}">
+                    <i class="bi bi-person-badge"></i>
+                    <span>Khách hàng</span>
+                </a>
+            </div>
+            @endif
+
+            @hasrole('author')
+            <div class="nav-caption">Nội dung</div>
+            
+            <div class="nav-item">
+                <a href="{{route('all_category_post')}}" class="nav-link {{ request()->routeIs('all_category_post') ? 'active' : '' }}">
+                    <i class="bi bi-collection"></i>
+                    <span>Danh mục bài viết</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <a href="{{route('all_post')}}" class="nav-link {{ request()->routeIs('all_post') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>Bài viết</span>
+                </a>
+            </div>
+            @endhasrole
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="bi bi-list"></i>
+            </button>
+            <h4 class="mb-0 ms-3">{{$title ?? 'Dashboard'}}</h4>
+        </div>
+        
+        <div class="header-right">
+            <div class="dropdown user-dropdown">
+                <img src="{{asset('backend/assets/images/user/avatar-1.jpg')}}" 
+                     class="user-avatar" 
+                     data-bs-toggle="dropdown" 
+                     alt="User Avatar">
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><h6 class="dropdown-header">{{Auth::user()->name}}</h6></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Hồ sơ</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Cài đặt</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{route('logout')}}"><i class="bi bi-box-arrow-right me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        @yield('content')
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const header = document.getElementById('header');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('collapsed');
+            header.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
         });
-</script>
 
-<!-- Required Js -->
-<script src="{{asset('backend/assets/js/vendor-all.min.js')}}"></script>
-<script src="{{asset('backend/assets/js/plugins/bootstrap.min.js')}}"></script>
-<script src="{{asset('backend/assets/js/pcoded.min.js')}}"></script>
+        // Mobile Sidebar
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.add('collapsed');
+            document.getElementById('header').classList.add('sidebar-collapsed');
+            document.getElementById('mainContent').classList.add('sidebar-collapsed');
+        }
 
-<script src="{{asset('backend/assets/js/plugins/apexcharts.min.js')}}"></script>
-<script src="{{asset('backend/assets/js/plugins/apexcharts.min.js')}}"></script>
-<script src="{{asset('backend/assets/js/pcoded.js')}}"></script>
+        // Loading Animation
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
 
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
 
-<!-- custom-chart js -->
-<script src="{{asset('backend/assets/js/pages/dashboard-main.js')}}"></script>
-@yield('js')
+        // Toastr Configuration
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
 
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+
+    @yield('js')
 </body>
 
 </html>

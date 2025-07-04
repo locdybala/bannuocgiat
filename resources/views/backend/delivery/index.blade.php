@@ -1,78 +1,55 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Quản lý phí vận chuyển</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Phí vận chuyển</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh sách phí vận chuyển</a></li>
-                            </ul>
-                        </div>
-                    </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Phí vận chuyển</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách phí vận chuyển</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Danh sách phí vận chuyển</h5>
+                    <a href="{{ route('add_fee') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm phí vận chuyển
+                    </a>
                 </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-
-                <!-- [ stiped-table ] start -->
-                <div class="col-xl-12">
-                    <div class="card">
-                        @include('backend.components.notification');
-                        <div class="card-header">
-                            <h5>Danh sách phí vận chuyển</h5>
-                            <div>
-                                <a href="{{ route('add_fee') }}" class="btn mt-2 btn-sm btn-primary">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Thêm phí vận
-                                    chuyển</a>
-                            </div>
-                        </div>
-                        <div class="card-body table-border-style">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên thành phố</th>
+                                    <th>Tên quận huyện</th>
+                                    <th>Tên xã phường</th>
+                                    <th>Phí ship</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i=0; @endphp
+                                @forelse ($feeship as $feeship)
+                                    @php $i++; @endphp
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Tên thành phố</th>
-                                        <th>Tên quận huyện</th>
-                                        <th>Tên xã phường</th>
-                                        <th>Phí ship</th>
+                                        <td>{{$i}}</td>
+                                        <td>{{ optional($feeship->city)->name_city }}</td>
+                                        <td>{{ optional($feeship->province)->name_quanhuyen }}</td>
+                                        <td>{{ optional($feeship->wards)->name_xaphuong }}</td>
+                                        <td><strong>{{number_format($feeship->fee_feeship)}} đ</strong></td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=0; @endphp
-                                    @if ($feeship)
-                                        @foreach ($feeship as $feeship)
-                                            @php $i++; @endphp
-                                            <tr>
-                                                <td>{{$i}}</td>
-                                                <td>{{ optional($feeship->city)->name_city }}</td>
-                                                <td>{{ optional($feeship->province)->name_quanhuyen }}</td>
-                                                <td>{{ optional($feeship->wards)->name_xaphuong }}</td>
-                                                <td>{{number_format($feeship->fee_feeship)}}</td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <td>Không có dữ liệu</td>
-                                    @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <!-- [ stiped-table ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </section>
+    </div>
 @endsection

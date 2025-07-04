@@ -1,124 +1,96 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Danh sách sản phẩm</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Sản phẩm</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh sách sản phẩm</a></li>
-                            </ul>
-                        </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Sản phẩm</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách sản phẩm</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <h5 class="mb-0">Danh sách sản phẩm</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ route('add_product') }}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i> Thêm sản phẩm
+                        </a>
+                        <form action="{{route('export_csv')}}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-dark btn-sm"><i class="bi bi-file-earmark-excel me-1"></i>Xuất Excel</button>
+                        </form>
                     </div>
                 </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-
-                <!-- [ stiped-table ] start -->
-                <div class="col-xl-12">
-                    <div class="card">
-                        @include('backend.components.notification')
-                        <div class="card-header">
-                            <h5>Danh sách sản phẩm</h5>
-                            <div style="display: flex">
-                                <a href="{{ route('add_product') }}" class="btn btn-sm btn-primary mt-2 mr-2">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Thêm sản phẩm</a>
-                                <form action="{{route('export_csv')}}" method="POST">
-                                    @csrf
-                                    <input type="submit" value="Xuất Excel" name="export_csv"
-                                           class="btn btn-dark btn-sm mt-2">
-                                </form>
-                            </div>
-                        </div>
-                        <div class="card-body table-border-style">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thư viện ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Số lượng</th>
+                                    <th>Danh mục</th>
+                                    <th>Tình trạng</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i=0; @endphp
+                                @forelse ($products as $product)
+                                    @php $i++; @endphp
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Thư viện ảnh</th>
-                                        <th>Giá</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Số lượng</th>
-                                        <th>Danh mục</th>
-{{--                                        <th>Thương hiệu</th>--}}
-                                        <th>Tình trạng</th>
-                                        <th>Thao tác</th>
+                                        <td>{{$i}}</td>
+                                        <td><strong>{{$product->product_name}}</strong></td>
+                                        <td>
+                                            <a class="btn btn-sm btn-info" href="{{route('add_gallery',['product_id'=>$product->product_id])}}">
+                                                <i class="bi bi-images"></i> Thêm thư viện
+                                            </a>
+                                        </td>
+                                        <td>{{number_format($product->product_price, 0,',' , '.')}} đ</td>
+                                        <td>
+                                            <img src="/upload/product/{{ $product->product_image }}" style="width:100px;height:70px;border-radius:8px;box-shadow:0 2px 8px #eee;object-fit:cover;" alt="">
+                                        </td>
+                                        <td>{{$product->product_quantity}}</td>
+                                        <td>{{ optional($product->category)->category_name }}</td>
+                                        <td>
+                                            @if ($product->product_status==1)
+                                                <a href="{{ route('unactive_product',['id'=>$product->product_id]) }}" class="badge bg-success text-decoration-none">Kích hoạt</a>
+                                            @else
+                                                <a href="{{ route('active_product',['id'=>$product->product_id]) }}" class="badge bg-warning text-dark text-decoration-none">Không kích hoạt</a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a class="btn btn-warning btn-sm" title="Sửa"
+                                                   href="{{ route('updateproduct',['id'=>$product->product_id]) }}">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <form method="POST" action="{{ route('deleteproduct',['id'=>$product->product_id]) }}" onsubmit="return confirm('Bạn có muốn xóa sản phẩm này không?')">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=0; @endphp
-                                    @if ($products)
-                                        @foreach ($products as $product)
-                                            @php $i++; @endphp
-                                            <tr>
-                                                <td>{{$i}}</td>
-
-                                                <td><strong>{{$product->product_name}}</strong></td>
-                                                <td><a class="btn btn-sm btn-primary"
-                                                       href="{{route('add_gallery',['product_id'=>$product->product_id])}}">Thêm
-                                                        thư viện ảnh</a></td>
-                                                <td>{{number_format($product->product_price, 0,',' , '.')}} đ</td>
-                                                <td><img src="/upload/product/{{ $product->product_image }}"
-                                                         style="width:150px;height:100px;" alt=""></td>
-                                                <td>{{$product->product_quantity}}</td>
-                                                <td>{{ optional($product->category)->category_name }}</td>
-{{--                                                <td>{{ optional($product->brand)->brand_name }}</td>--}}
-
-                                                @if ($product->product_status==1)
-
-                                                    <td>
-                                                        <a href="{{ route('unactive_product',['id'=>$product->product_id]) }}"
-                                                           class="badge badge-success">Kích hoạt</a>
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <a href="{{ route('active_product',['id'=>$product->product_id]) }}"
-                                                           class="badge badge-warning">Không kích hoạt</a>
-                                                    </td>
-
-                                                @endif
-                                                <td>
-                                                    <div style="display: flex">
-                                                        <a class="btn btn-sm btn-warning"
-                                                           href="{{ route('updateproduct',['id'=>$product->product_id]) }}"
-                                                        ><i class="fa fa-pencil"></i></a
-                                                        >
-                                                        <form method="POST" action="">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <a onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')"
-                                                               href="{{ route('deleteproduct',['id'=>$product->product_id]) }}"
-                                                               class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash"></i></a>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <td>Không có dữ liệu</td>
-                                    @endif
-                                    </tbody>
-                                </table>
-                                @include('backend.components.pagination', ['paginator' => $products]);
-                            </div>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        @include('backend.components.pagination', ['paginator' => $products])
                     </div>
                 </div>
-                <!-- [ stiped-table ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </section>
+    </div>
 @endsection

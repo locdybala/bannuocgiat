@@ -1,4 +1,4 @@
-@extends('backend.admin_layout')
+@extends('backend.admin_layout_new')
 @section('content')
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
@@ -366,4 +366,4 @@
             }
         });
     </script>
-@endsection
+@endsection 

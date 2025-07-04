@@ -1,111 +1,70 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Thêm trang</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Quản lý trang</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Thêm trang</a></li>
-                            </ul>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Quản lý trang</li>
+            <li class="breadcrumb-item active" aria-current="page">Thêm trang</li>
+        </ol>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Thêm mới trang</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{route('addPages')}}" method="POST" id="pageForm" autocomplete="off">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên trang <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required id="name" name="name" placeholder="Nhập tên trang"/>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="slug" class="form-label">Slug <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required id="slug" name="slug" placeholder="Slug"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" required id="title" name="title" placeholder="Nhập tiêu đề"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ckeditor" class="form-label">Nội dung <span class="text-danger">*</span></label>
+                            <textarea id="ckeditor" class="form-control" name="contents" placeholder="Nội dung trang" required></textarea>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" id="btnSubmit" class="btn btn-primary"><i class="bi bi-plus-circle me-1"></i>Thêm</button>
+                            <a href="/admin/pages/all_pages" class="btn btn-outline-secondary">Huỷ</a>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Thêm mới trang</h5>
-                        </div>
-                        <div class="card-body">
-                            <form action="{{route('addPages')}}" method="POST">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="name">Tên trang <span class="required">(*)</span></label>
-                                            <input type="text" class="form-control" required id="name" name="name"
-                                                   placeholder="Nhập tên trang"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="name">Slug <span
-                                                    class="required">(*)</span></label>
-                                            <input type="text" class="form-control" required id="slug" name="slug"
-                                                   placeholder="Slug"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="title">Tiêu đề <span
-                                                    class="required">(*)</span></label>
-                                            <input type="text" class="form-control" required id="title" name="title"
-                                                   placeholder="Nhập tiêu đề"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label class="floating-label" for="ckeditor">Nội dung <span
-                                                    class="required">(*)</span></label>
-                                            <textarea
-                                                id="ckeditor"
-                                                class="form-control" name="contents"
-                                                placeholder="Mô tả trang" required
-                                            ></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <button type="submit" id="btnSubmit" class="btn btn-primary">Thêm</button>
-                                            <a href="/admin/pages/all_pages" class="btn btn-default">Huỷ</a>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- [ form-element ] start -->
-            </div>
-            <!-- [ Main Content ] end -->
-
         </div>
-    </section>
+    </div>
 @endsection
-
 @section('js')
     <script>
         CKEDITOR.replace('ckeditor');
         $("#btnSubmit").click(function () {
-            var name = $("#name").val();
-            var slug = $("#slug").val();
-            var content = $("#content").val();
-            var title = $('#title').val();
-
-            if (name == '') {
+            var name = $("#name").val().trim();
+            var slug = $("#slug").val().trim();
+            var content = CKEDITOR.instances.ckeditor.getData();
+            var title = $('#title').val().trim();
+            if (name === '') {
                 toastr["error"]("Tên trang không được bỏ trống");
+                $('#name').focus();
                 return false;
-            } else if (slug == '') {
+            } else if (slug === '') {
                 toastr["error"]("Slug không được bỏ trống");
+                $('#slug').focus();
                 return false;
-            } else if (title == '') {
+            } else if (title === '') {
                 toastr["error"]("Tiêu đề không được bỏ trống");
+                $('#title').focus();
                 return false;
-            } else if (content == '') {
+            } else if (content === '') {
                 toastr["error"]("Nội dung không được bỏ trống");
+                CKEDITOR.instances.ckeditor.focus();
                 return false;
             }
             return true;

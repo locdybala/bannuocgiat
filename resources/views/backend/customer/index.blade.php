@@ -1,99 +1,79 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Quản lý khách hàng</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Khách hàng</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh sách khách hàng</a></li>
-                            </ul>
-                        </div>
-                    </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Khách hàng</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách khách hàng</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Danh sách khách hàng</h5>
+                    <a href="{{ route('customer.add') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm khách hàng
+                    </a>
                 </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-
-                <!-- [ stiped-table ] start -->
-                <div class="col-xl-12">
-                    <div class="card">
-                        @include('backend.components.notification');
-                        <div class="card-header">
-                            <h5>Danh sách khách hàng</h5>
-                            <div>
-                                <a href="{{ route('add_customer') }}"
-                                   class="btn btn-sm mt-2 btn-primary">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Thêm khách hàng</a>
-                            </div>
-                        </div>
-                        <div class="card-body table-border-style">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ tên</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i=0; @endphp
+                                @forelse ($customers as $customer)
+                                    @php $i++; @endphp
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên khách hàng</th>
-                                        <th>Địa chỉ email</th>
-                                        <th>Ngày sinh</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Thao tác</th>
+                                        <td>{{$i}}</td>
+                                        <td>{{$customer->name}}</td>
+                                        <td>{{$customer->email}}</td>
+                                        <td>{{$customer->phone}}</td>
+                                        <td>
+                                            @if ($customer->status == 1)
+                                                <span class="badge bg-success">Hoạt động</span>
+                                            @else
+                                                <span class="badge bg-secondary">Khóa</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $customer->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-warning btn-sm" title="Sửa">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <form method="POST" action="{{ route('customer.delete', $customer->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa khách hàng này?')">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=0; @endphp
-                                    @if ($customers)
-                                        @foreach ($customers as $cus)
-                                            @php $i++; @endphp
-                                            <tr>
-                                                <td>{{$i}}</td>
-                                                <td>{{ $cus->customer_name }}</td>
-                                                <td>{{ $cus->customer_email }}</td>
-                                                <td>{{$cus->customer_birthday}}</td>
-                                                <td>{{$cus->customer_phone}}</td>
-                                                <td>{{ $cus->customer_address }}</td>
-                                                <td>
-
-                                                    <div style="display: flex">
-                                                        <a class="btn btn-sm btn-warning"
-                                                           href="{{route('update_customer',['id'=>$cus->customer_id])}}"
-                                                        ><i class="fa fa-pencil"></i></a
-                                                        >
-                                                        <form method="POST" action="">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <a onclick="return confirm('Bạn có muốn xóa khách hàng này không?')"
-                                                               href="{{ route('deletecustomer',['id'=>$cus->customer_id]) }}"
-                                                               class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
-                                                                </i></a>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <td>Không có dữ liệu</td>
-                                    @endif
-                                    </tbody>
-                                </table>
-                                @include('backend.components.pagination', ['paginator' => $customers]);
-                            </div>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        @include('backend.components.pagination', ['paginator' => $customers])
                     </div>
                 </div>
-                <!-- [ stiped-table ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </section>
+    </div>
 @endsection

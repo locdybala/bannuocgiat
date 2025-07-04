@@ -1,109 +1,75 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Quản lý slider</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                                class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Slider</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh sách slider</a></li>
-                            </ul>
-                        </div>
-                    </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Slider</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách slider</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Danh sách slider</h5>
+                    <a href="{{ route('add_slider') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm slider
+                    </a>
                 </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-
-                <!-- [ stiped-table ] start -->
-                <div class="col-xl-12">
-                    <div class="card">
-                        @include('backend.components.notification')
-                        <div class="card-header">
-                            <h5>Danh sách slider</h5>
-                            <div>
-                                <a href="{{ route('add_slider') }}"
-                                   class="btn mt-2 btn-sm btn-primary"><i class="fa fa-plus-circle"
-                                                                          aria-hidden="true"></i> Thêm slider</a>
-                            </div>
-                        </div>
-                        <div class="card-body table-border-style">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên slider</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i=0; @endphp
+                                @forelse ($sliders as $slider)
+                                    @php $i++; @endphp
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên slider</th>
-                                        <th>Hình ảnh</th>
-                                        <th>Tình trạng</th>
-                                        <th>Thao tác</th>
+                                        <td>{{$i}}</td>
+                                        <td><strong>{{$slider->slider_name}}</strong></td>
+                                        <td><img src="/upload/slider/{{ $slider->slider_image }}" style="width:120px;height:70px;border-radius:8px;box-shadow:0 2px 8px #eee;object-fit:cover;" alt=""></td>
+                                        <td>
+                                            @if ($slider->slider_status==1)
+                                                <a href="{{ route('unactive_slider',['id'=>$slider->slider_id]) }}" class="badge bg-success text-decoration-none">Kích hoạt</a>
+                                            @else
+                                                <a href="{{ route('active_slider',['id'=>$slider->slider_id]) }}" class="badge bg-warning text-dark text-decoration-none">Không kích hoạt</a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a class="btn btn-warning btn-sm" title="Sửa" href="{{ route('updateslider',['id'=>$slider->slider_id]) }}">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <form method="POST" action="{{ route('deleteslider',['id'=>$slider->slider_id]) }}" onsubmit="return confirm('Bạn có muốn xóa slider này không?')">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=0; @endphp
-                                    @if ($sliders)
-                                        @foreach ($sliders as $slider)
-                                            @php $i++; @endphp
-                                            <tr>
-                                                <td>{{$i}}</td>
-                                                <td><strong>{{$slider->slider_name}}</strong></td>
-                                                <td><img src="/upload/slider/{{ $slider->slider_image }}"
-                                                         style="width:150px;height:100px;" alt="">
-                                                </td>
-                                                @if ($slider->slider_status==1)
-
-                                                    <td>
-                                                        <a href="{{ route('unactive_slider',['id'=>$slider->slider_id]) }}"
-                                                           class="badge badge-success">Kích hoạt</a>
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <a href="{{ route('active_slider',['id'=>$slider->slider_id]) }}"
-                                                           class="badge badge-warning">Không kích hoạt</a>
-                                                    </td>
-
-                                                @endif
-                                                <td>
-
-                                                    <div style="display: flex">
-                                                        <a class="btn btn-sm btn-warning"
-                                                           href="{{ route('updateslider',['id'=>$slider->slider_id]) }}"
-                                                        ><i class="fa fa-pencil"></i> </a
-                                                        >
-                                                        <form method="POST" action="">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <a onclick="return confirm('Bạn có muốn xóa slider này không?')"
-                                                               href="{{ route('deleteslider',['id'=>$slider->slider_id]) }}"
-                                                               class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
-                                                                </i></a>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <td>Không có dữ liệu</td>
-                                    @endif
-                                    </tbody>
-                                </table>
-                                @include('backend.components.pagination', ['paginator' => $sliders]);
-                            </div>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        @include('backend.components.pagination', ['paginator' => $sliders])
                     </div>
                 </div>
-                <!-- [ stiped-table ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </section>
+    </div>
 @endsection

@@ -1,105 +1,73 @@
 @extends('backend.admin_layout')
 @section('content')
-    <section class="pcoded-main-container">
-        <div class="pcoded-content">
-            <!-- [ breadcrumb ] start -->
-            <div class="page-header">
-                <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10">Quản lý danh mục bài viết</h5>
-                            </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i
-                                            class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh mục bài viết</a></li>
-                                <li class="breadcrumb-item"><a href="#!">Danh sách danh mục bài viết</a></li>
-                            </ul>
-                        </div>
-                    </div>
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item">Danh mục bài viết</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách danh mục bài viết</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Danh sách danh mục</h5>
+                    <a href="{{ route('add_PostCategory') }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Thêm danh mục bài viết
+                    </a>
                 </div>
-            </div>
-            <!-- [ breadcrumb ] end -->
-            <!-- [ Main Content ] start -->
-            <div class="row">
-
-                <!-- [ stiped-table ] start -->
-                <div class="col-xl-12">
-                    <div class="card">
-                        @include('backend.components.notification')
-                        <div class="card-header">
-                            <h5>Danh sách danh mục</h5>
-                            <div>
-                                <a href="{{ route('add_PostCategory') }}"
-                                   class="btn btn-sm mt-2 btn-primary">
-                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Thêm danh mục bài viết</a>
-                            </div>
-                        </div>
-                        <div class="card-body table-border-style">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                <div class="card-body">
+                    @include('backend.components.notification')
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Hiển Thị</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i=0; @endphp
+                                @forelse ($categories as $category)
+                                    @php $i++; @endphp
                                     <tr>
-                                        <th>STT</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Hiển Thị</th>
-                                        <th>Action</th>
+                                        <td>{{$i}}</td>
+                                        <td><strong>{{$category->cate_post_name}}</strong></td>
+                                        <td>
+                                            @if ($category->cate_post_status==1)
+                                                <a href="{{ route('unactive_category_post',['id'=>$category->cate_post_id]) }}" class="badge bg-success text-decoration-none">Kích hoạt</a>
+                                            @else
+                                                <a href="{{ route('active_category_post',['id'=>$category->cate_post_id]) }}" class="badge bg-warning text-dark text-decoration-none">Không kích hoạt</a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a class="btn btn-warning btn-sm" title="Sửa" href="{{ route('updatecategory_post',['id'=>$category->cate_post_id]) }}">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <form method="POST" action="{{ route('deleteCategoryPost',['id'=>$category->cate_post_id]) }}" onsubmit="return confirm('Bạn có muốn xóa danh mục này không?')">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i=0; @endphp
-                                    @if ($categories)
-                                        @foreach ($categories as $category)
-                                            @php $i++; @endphp
-                                            <tr>
-                                                <td>{{$i}}</td>
-                                                <td><strong>{{$category->cate_post_name}}</strong></td>
-                                                @if ($category->cate_post_status==1)
-
-                                                    <td>
-                                                        <a href="{{ route('unactive_category_post',['id'=>$category->cate_post_id]) }}"
-                                                           class="badge badge-success">Kích hoạt</a>
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <a href="{{ route('active_category_post',['id'=>$category->cate_post_id]) }}"
-                                                           class="badge badge-warning">Không kích hoạt</a>
-                                                    </td>
-
-                                                @endif
-                                                <td>
-
-                                                    <div style="display: flex">
-                                                        <a class="btn btn-sm btn-warning"
-                                                           href="{{ route('updatecategory_post',['id'=>$category->cate_post_id]) }}"
-                                                        ><i class="fa fa-pencil"></i></a
-                                                        >
-                                                        <form method="POST" action="">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <a onclick="return confirm('Bạn có muốn xóa danh mục này không?')"
-                                                               href="{{ route('deleteCategoryPost',['id'=>$category->cate_post_id]) }}"
-                                                               class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
-                                                                </i></a>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <td>Không có dữ liệu</td>
-                                    @endif
-                                    </tbody>
-                                </table>
-                                @include('backend.components.pagination', ['paginator' => $categories]);
-                            </div>
-                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        @include('backend.components.pagination', ['paginator' => $categories])
                     </div>
                 </div>
-                <!-- [ stiped-table ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </section>
+    </div>
 @endsection
