@@ -195,7 +195,7 @@
                     <div class="mb-4 form-check">
                         <input type="checkbox" class="form-check-input" id="remember" name="remember">
                         <label class="form-check-label" for="remember">
-                            <i class="bi bi-check2-square me-1"></i>Lưu đăng nhập
+                            Lưu đăng nhập
                         </label>
                     </div>
 
