@@ -26,15 +26,15 @@ class HomeController extends Controller
         $productSolds = Product::where('product_status', '1')->orderby('product_sold', 'desc')->limit(9)->get();
         $productLimit = Product::where('product_status', '1')->orderby('product_price', 'desc')->limit(1)->first();
         $productView = Product::where('product_status', '1')->orderby('product_view', 'desc')->limit(1)->first();
-        $bestSellers = Product::latest()->limit(5)->get();
+        $bestSellers = Product::latest()->limit(4)->get();
         $sliders = Slider::where('slider_status', '1')->get();
-        $categories = Category::latest()->take(4)->get(); // Lấy 4 danh mục mới nhất
+        $categories = Category::latest()->take(5)->get(); // Lấy 4 danh mục mới nhất
         $categorypost = CategoryPost::where('cate_post_status', '1')->orderby('cate_post_id', 'desc')->get();
         $pages = Pages::all();
         $coupon = Coupon::whereDate('coupon_date_start', '<=', now())
             ->whereDate('coupon_date_end', '>=', now())
             ->first();
-        $products = Product::latest()->take(16)->get();
+        $products = Product::latest()->take(8)->get();
         return view('pages.home', compact('category', 'brand', 'products', 'sliders', 'productView', 'productLimit', 'categorypost',
             'title', 'productNews', 'pages', 'productSolds', 'categories', 'coupon', 'bestSellers'));
     }

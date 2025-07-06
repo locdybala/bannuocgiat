@@ -54,16 +54,18 @@
                                         </td>
                                         <td>
                                             <div class="d-flex gap-2">
-                                                <a href="{{ route('edit_post', $post->post_id) }}" class="btn btn-warning btn-sm" title="Sửa">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                                <form method="POST" action="{{ route('delete_post', $post->post_id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa bài viết này?')">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
+                                                <a class="btn btn-sm btn-warning"
+                                                           href="{{ route('updatepost',['id'=>$post->post_id]) }}"
+                                                        ><i class="fa fa-pencil"></i></a
+                                                        >
+                                                        <form method="POST" action="">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <a onclick="return confirm('Bạn có muốn xóa bài viết này không?')"
+                                                               href="{{ route('deletePost',['id'=>$post->post_id]) }}"
+                                                               class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
+                                                                </i></a>
+                                                        </form>
                                             </div>
                                         </td>
                                     </tr>

@@ -1,70 +1,78 @@
 @extends('layout')
 @section('content')
-    <section class="breadcrumb breadcrumb_bg">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Đăng nhập tài khoản</h2>
-                            <p>Trang Chủ <span>-</span> Đăng nhập</p>
-                        </div>
-                    </div>
-                </div>
+<div class="hero-wrap hero-bread" style="background-image: url('/frontend/images/bg_1.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{{ URL::to('/') }}">Trang chủ</a></span>
+                    <span>Đăng nhập</span>
+                </p>
+                <h1 class="mb-0 bread">Đăng Nhập Tài Khoản</h1>
             </div>
         </div>
-    </section>
-    <!-- Checkout Page Start -->
-    <section class="login_part padding_top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>Bạn là khách hàng mới?</h2>
-                            <p>Bạn muốn sử dụng trang web và mua hàng trực tuyến</p>
-                            <a href="{{route('registerCustomer')}}" class="btn_3">Tạo mới tài khoản</a>
+    </div>
+</div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-7 ftco-animate">
+                {{-- Bọc form trong một khung để đẹp hơn --}}
+                <div class="billing-form">
+                    <h3 class="mb-4 billing-heading">Để tiếp tục, vui lòng đăng nhập</h3>
+
+                    {{-- Hiển thị thông báo thành công hoặc thất bại --}}
+                    @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                            @php session()->forget('success'); @endphp
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Chào mừng trở lại! <br> Vui lòng đăng nhập ngay bây giờ</h3>
-                            @if(session()->has('success'))
-                                <div class="alert alert-success alert-block">
-                                    {{session()->get('success')}}
-                                    @php session()->forget('success') @endphp
+                    @elseif(session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                             @php session()->forget('error'); @endphp
+                        </div>
+                    @endif
+
+                    <form action="{{route('login_customer')}}" method="POST">
+                        {{ csrf_field() }}
+                        <div class="row align-items-end">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="email_account">Tài khoản Email</label>
+                                    <input type="email" class="form-control" name="email_account" placeholder="Nhập địa chỉ email của bạn" value="{{old('email_account')}}" required>
                                 </div>
-                            @elseif(session()->has('error'))
-                                <div class="alert alert-danger alert-block">
-                                    {{session()->get('error')}}
-                                    @php session()->forget('error') @endphp
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="password_account">Mật khẩu</label>
+                                    <input type="password" class="form-control" name="password_account" placeholder="Nhập mật khẩu của bạn" required>
                                 </div>
-                            @endif
-                            <form class="row contact_form" action="{{route('login_customer')}}" method="POST">
-                                {{csrf_field()}}
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" class="form-control" id="email_account" name="email_account" value="{{old('email_account')}}" placeholder="Tài khoản email">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password_account" name="password_account" value="{{old('password_account')}}" placeholder="Mật khẩu">
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <div class="creat_account d-flex align-items-center">
-                                        <input type="checkbox" id="f-option" name="selector">
-                                        <label for="f-option">Ghi nhớ đăng nhập</label>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group mt-4">
+                                    <div class="radio">
+                                        {{-- Ghi nhớ đăng nhập & Quên mật khẩu --}}
+                                        <label class="mr-3"><input type="checkbox" name="remember"> Ghi nhớ đăng nhập</label>
+                                        <a href="{{route('forgot_pass')}}" class="ml-5">Quên mật khẩu?</a>
                                     </div>
-                                    <button type="submit" id="btnSubmit" value="submit" class="btn_3">Đăng nhập</button>
-                                    <a class="lost_pass" href="{{route('forgot_pass')}}">Quên mật khẩu?</a>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <p><button type="submit" class="btn btn-primary py-3 px-4">Đăng nhập</button></p>
+                            </div>
                         </div>
-                    </div>
+                    </form></div>
+
+                <div class="text-center mt-4">
+                    <p>Bạn chưa có tài khoản? <a href="{{route('registerCustomer')}}">Đăng ký ngay</a></p>
                 </div>
-            </div>
-        </div>
-    </section>
+            </div> </div>
+    </div>
+</section>
 @endsection
 @section('javascript')
     <script type="text/javascript">

@@ -1,228 +1,405 @@
 @extends('layout')
 @section('content')
-
-    @if(isset($sliders) && count($sliders) > 0)
-        <section class="banner_part">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-12">
-                        <div class="banner_slider owl-carousel">
-                            @foreach($sliders as $slider)
-                                <div class="single_banner_slider">
-                                    <div class="row">
-                                        <div class="col-lg-5 col-md-8">
-                                            <div class="banner_text">
-                                                <div class="banner_text_iner">
-                                                    <h1>{{ $slider->slider_name }}</h1>
-                                                    <p>{!! $slider->slider_desc !!} </p>
-                                                    <a href="{{route('shop')}}" class="btn_2">Mua ngay</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="banner_img d-none d-lg-block">
-                                            <img src="{{ asset('upload/slider/'. $slider->slider_image) }}"
-                                                 alt="{{ $slider->title }}">
-                                        </div>
-                                    </div>
+    @if (isset($sliders) && count($sliders) > 0)
+        <section id="home-section" class="hero">
+            <div class="home-slider owl-carousel">
+                @foreach ($sliders as $slider)
+                    <div class="slider-item"
+                        style="background-image: url({{ asset('upload/slider/' . $slider->slider_image) }});">
+                        <div class="overlay"></div>
+                        <div class="container">
+                            <div class="row slider-text justify-content-center align-items-center"
+                                data-scrollax-parent="true">
+                                <div class="col-md-12 ftco-animate text-center">
+                                    <h1 class="mb-2">{{ $slider->slider_name }}</h1>
+                                    <h2 class="subheading mb-4">{!! $slider->slider_desc !!}</h2>
+                                    <p><a href="{{ route('shop') }}" class="btn btn-primary">Mua ngay</a></p>
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
-                        <div class="slider-counter"></div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </section>
     @endif
 
-    <!-- feature_part start-->
-    <section class="feature_part padding_top">
+    <section class="ftco-section" style="padding: 90px 0 ">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="section_tittle text-center">
-                        <h2>Danh mục nổi bật</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center justify-content-between">
-                @foreach($categories as $key => $ca)
-                    <div class="col-lg-6 col-sm-6">
-                        <div class="single_feature_post_text" style="height: 150px !important;">
-                            <p>Chất lượng cao</p>
-                            <h3>{{ $ca->category_name }}</h3>
-                            <a style="margin-left:300px;" href="{{ route('detailCategory',['id'=>$ca->category_id]) }}" class="feature_btn">XEM NGAY <i class="fas fa-play"></i></a>
+            <div class="row no-gutters ftco-services">
+
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-shipped"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Miễn Phí Giao Hàng</h3>
+                            <span>Cho đơn hàng từ 1.000.000đ</span>
                         </div>
                     </div>
-                @endforeach
+                </div>
+
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-diet"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Hương Thơm Bền Lâu</h3>
+                            <span>Công nghệ lưu hương độc quyền</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-award"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Chất Lượng Vượt Trội</h3>
+                            <span>Sạch sâu, an toàn cho da tay</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services mb-md-0 mb-4">
+                        <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
+                            <span class="flaticon-customer-service"></span>
+                        </div>
+                        <div class="media-body">
+                            <h3 class="heading">Hỗ Trợ 24/7</h3>
+                            <span>Tư vấn và giải đáp thắc mắc</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- feature_part start-->
+    <section class="ftco-section ftco-category ftco-no-pt">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6 order-md-last align-items-stretch d-flex">
+                            {{-- Khối danh mục lớn nhất --}}
+                            @if (isset($categories[0]))
+                                <div class="category-wrap-2 ftco-animate img align-self-stretch d-flex"
+                                    style="background-image: url(frontend/images/category.jpg);">
+                                    <div class="text text-center">
+                                        <h2>{{ $categories[0]->category_name }}</h2>
+                                        <p>Sản phẩm chất lượng hàng đầu</p>
+                                        <p><a href="{{ route('detailCategory', ['id' => $categories[0]->category_id]) }}"
+                                                class="btn btn-primary">Xem ngay</a></p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            {{-- Khối danh mục nhỏ thứ nhất --}}
+                            @if (isset($categories[1]))
+                                <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
+                                    style="background-image: url(frontend/images/category-1.jpg);">
+                                    <div class="text px-3 py-1">
+                                        <h2 class="mb-0"><a
+                                                href="{{ route('detailCategory', ['id' => $categories[1]->category_id]) }}">{{ $categories[1]->category_name }}</a>
+                                        </h2>
+                                    </div>
+                                </div>
+                            @endif
+                            {{-- Khối danh mục nhỏ thứ hai --}}
+                            @if (isset($categories[2]))
+                                <div class="category-wrap ftco-animate img d-flex align-items-end"
+                                    style="background-image: url(frontend/images/category-2.jpg);">
+                                    <div class="text px-3 py-1">
+                                        <h2 class="mb-0"><a
+                                                href="{{ route('detailCategory', ['id' => $categories[2]->category_id]) }}">{{ $categories[2]->category_name }}</a>
+                                        </h2>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    {{-- Khối danh mục nhỏ thứ ba --}}
+                    @if (isset($categories[3]))
+                        <div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
+                            style="background-image: url(frontend/images/category-3.jpg);">
+                            <div class="text px-3 py-1">
+                                <h2 class="mb-0"><a
+                                        href="{{ route('detailCategory', ['id' => $categories[3]->category_id]) }}">{{ $categories[3]->category_name }}</a>
+                                </h2>
+                            </div>
+                        </div>
+                    @endif
+                    {{-- Khối danh mục nhỏ thứ tư --}}
+                    @if (isset($categories[4]))
+                        <div class="category-wrap ftco-animate img d-flex align-items-end"
+                            style="background-image: url(frontend/images/category-4.jpg);">
+                            <div class="text px-3 py-1">
+                                <h2 class="mb-0"><a
+                                        href="{{ route('detailCategory', ['id' => $categories[4]->category_id]) }}">{{ $categories[4]->category_name }}</a>
+                                </h2>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </section>
 
     <!-- product_list start-->
-    <section class="product_list section_padding">
+    <section class="ftco-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center">
-                        <h2>Danh sách <span>Sản phẩm</span></h2>
-                    </div>
+            {{-- Phần Tiêu Đề --}}
+            <div class="row justify-content-center mb-3 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Sản phẩm nổi bật</span>
+                    <h2 class="mb-4">Danh sách sản phẩm</h2>
+                    <p>Những sản phẩm tốt nhất được chọn lọc dành cho bạn</p>
                 </div>
             </div>
+        </div>
+        <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    @foreach ($products->chunk(8) as $chunk)
-                        <div class="single_product_list_slider">
-                            <div class="row align-items-center justify-content-between">
-                                @foreach ($chunk as $product)
-                                    <div class="col-lg-3 col-sm-6">
-                                        <form>
-                                            @csrf
-                                            <input type="hidden" value="{{$product->product_id}}" class="cart_product_id_{{$product->product_id}}">
-                                            <input type="hidden" value="{{$product->product_name}}" class="cart_product_name_{{$product->product_id}}">
-                                            <input type="hidden" value="{{$product->product_image}}" class="cart_product_image_{{$product->product_id}}">
-                                            <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->product_id}}">
-                                            <input type="hidden" value="{{$product->product_quantity}}" class="cart_product_quantity_{{$product->product_id}}">
-                                            <input type="hidden" value="1" class="cart_product_qty_{{$product->product_id}}">
-                                            <div class="single_product_item">
-                                                <a href="{{ route('detailProduct',['id'=>$product->product_id]) }}">
-                                                    <img src="/upload/product/{{ $product->product_image }}" alt=""></a>
-                                                <div class="single_product_text">
-                                                    <h4>{{$product->product_name}}</h4>
-                                                    <h3>{{number_format($product->product_price)}} vnđ</h3>
-                                                    @php
-                                                        $customerId = Session::get('customer_id');
-                                                    @endphp
-                                                    @if ($customerId)
-                                                        <input type="button" name="add-to-cart" value="Thêm giỏ hàng" data-id_product="{{$product->product_id}}" class="add-to-cart btn_3">
-                                                    @else
-                                                        <a href="{{URL::to('/login-checkout')}}" class="add_cart">Thêm giỏ hàng<i class="ti-heart"></i></a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </form>
+                {{-- Bắt đầu vòng lặp sản phẩm --}}
+                @foreach ($products as $product)
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        {{-- Mở Form cho từng sản phẩm để dùng cho AJAX Add to Cart --}}
+                        <form>
+                            @csrf
+                            <input type="hidden" value="{{ $product->product_id }}"
+                                class="cart_product_id_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_name }}"
+                                class="cart_product_name_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_image }}"
+                                class="cart_product_image_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_price }}"
+                                class="cart_product_price_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_quantity }}"
+                                class="cart_product_quantity_{{ $product->product_id }}">
+                            <input type="hidden" value="1" class="cart_product_qty_{{ $product->product_id }}">
+
+                            <div class="product">
+                                <a href="{{ route('detailProduct', ['id' => $product->product_id]) }}" class="img-prod">
+                                    <img class="img-fluid" style="width:253px; height:202px;"
+                                        src="/upload/product/{{ $product->product_image }}"
+                                        alt="Hình ảnh {{ $product->product_name }}">
+                                    {{-- Bạn có thể thêm logic cho tag giảm giá ở đây nếu cần --}}
+                                    {{-- <span class="status">30%</span> --}}
+                                    <div class="overlay"></div>
+                                </a>
+                                <div class="text py-3 pb-4 px-3 text-center">
+                                    <h3><a
+                                            href="{{ route('detailProduct', ['id' => $product->product_id]) }}">{{ $product->product_name }}</a>
+                                    </h3>
+                                    <div class="d-flex">
+                                        <div class="pricing">
+                                            <p class="price">
+                                                {{-- Chỉ hiển thị một giá, không có giá gạch ngang --}}
+                                                <span class="price-sale">{{ number_format($product->product_price) }}
+                                                    VNĐ</span>
+                                            </p>
+                                        </div>
                                     </div>
-                                @endforeach
+                                    <div class="bottom-area d-flex px-3">
+                                        <div class="m-auto d-flex">
+                                            {{-- Giữ nguyên logic kiểm tra đăng nhập của bạn --}}
+                                            @php
+                                                $customerId = Session::get('customer_id');
+                                            @endphp
+                                            @if ($customerId)
+                                                {{-- Nút Thêm giỏ hàng cho người đã đăng nhập (dùng cho AJAX) --}}
+                                                <button type="button" name="add-to-cart"
+                                                    data-id_product="{{ $product->product_id }}"
+                                                    class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
+                                                    <span><i class="ion-ios-cart"></i></span>
+                                                </button>
+                                            @else
+                                                {{-- Nút Thêm giỏ hàng chuyển đến trang đăng nhập --}}
+                                                <a href="{{ URL::to('/login-checkout') }}"
+                                                    class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                                    <span><i class="ion-ios-cart"></i></span>
+                                                </a>
+                                            @endif
+
+                                            {{-- Nút xem chi tiết (có thể giữ hoặc bỏ) --}}
+                                            <a href="{{ route('detailProduct', ['id' => $product->product_id]) }}"
+                                                class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                                <span><i class="ion-ios-menu"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
+                        </form> {{-- Đóng Form --}}
+                    </div>
+                @endforeach
+                {{-- Kết thúc vòng lặp --}}
             </div>
         </div>
     </section>
 
-    @if($coupon)
-        <section class="our_offer section_padding">
+    @if ($coupon)
+        <section class="ftco-section img" style="background-image: url(/frontend/images/bg_3.jpg);">
             <div class="container">
-                <div class="row align-items-center justify-content-between">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="offer_img">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="offer_text">
-                            <h2>Ưu đãi đặc biệt: {{ $coupon->coupon_condition == 1 ? $coupon->coupon_number.'%' : number_format($coupon->coupon_number) . ' VND' }} giảm giá</h2>
-                            <p>Áp dụng với mã: <strong>{{ $coupon->coupon_code }}</strong></p>
-                            <p>Thời gian khuyến mãi: {{ date('d/m/Y', strtotime($coupon->coupon_date_start)) }} - {{ date('d/m/Y', strtotime($coupon->coupon_date_end)) }}</p>
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="{{ $coupon->coupon_code }}" readonly>
-                                <div class="input-group-append">
-                                    <a href="#" class="input-group-text btn_2">Dùng ngay</a>
-                                </div>
-                            </div>
+                <div class="row justify-content-end">
+                    <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
+                        <span class="subheading">Mã Giảm Giá Tốt Nhất Dành Cho Bạn</span>
+                        <h2 class="mb-4">Ưu đãi đặc biệt hôm nay</h2>
+
+                        {{-- Hiển thị Mức giảm --}}
+                        <h3 class="text-light">
+                            Giảm ngay
+                            <a href="#" style="color: #82ae46; text-decoration: underline;">
+                                {{ $coupon->coupon_condition == 1 ? $coupon->coupon_number . '%' : number_format($coupon->coupon_number) . ' VNĐ' }}
+                            </a>
+                        </h3>
+
+                        {{-- Hiển thị Mã Coupon --}}
+                        <h4>Áp dụng với mã: <strong style="color: #ffc107;">{{ $coupon->coupon_code }}</strong></h4>
+
+                        {{-- Đồng hồ đếm ngược --}}
+                        <div id="timer" class="d-flex mt-5"
+                            data-deadline="{{ date('Y/m/d H:i:s', strtotime($coupon->coupon_date_end)) }}">
+                            <div class="time" id="days"></div>
+                            <div class="time pl-3" id="hours"></div>
+                            <div class="time pl-3" id="minutes"></div>
+                            <div class="time pl-3" id="seconds"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     @endif
-
-    <section class="product_list best_seller section_padding">
+    <section class="ftco-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center">
-                        <h2>Sản phẩm <span>mới</span></h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center justify-content-between">
-                <div class="col-lg-12">
-                    <div class="best_product_slider owl-carousel">
-                        @foreach($bestSellers as $product)
-                            <div class="single_product_item">
-                                <a href="{{ route('detailProduct',['id'=>$product->product_id]) }}">
-                                    <img src="/upload/product/{{ $product->product_image }}" alt="">
-                                    <div class="single_product_text">
-                                        <h4>{{$product->product_name}}</h4>
-                                        <h3>{{number_format($product->product_price)}}</h3>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+            {{-- Phần Tiêu Đề --}}
+            <div class="row justify-content-center mb-3 pb-3">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Sản phẩm mới</span>
+                    <h2 class="mb-4">Danh sách sản phẩm</h2>
+                    <p>Những sản phẩm mới nhất của cửa hàng</p>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="client_logo padding_top">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center mb-5">
-                        <h2>Thương hiệu nổi bật</h2>
-                    </div>
-                    <div class="client_logo_slider owl-carousel">
-                        @foreach($brand as $item)
-                            @if($item->brand_status == 1)
-                                <div class="single_client_logo">
-                                    <div class="brand-item">
-                                        <img src="/upload/brand/{{ $item->brand_image }}" alt="{{ $item->brand_name }}">
+            <div class="row">
+                {{-- Bắt đầu vòng lặp sản phẩm --}}
+                @foreach ($bestSellers as $product)
+                    <div class="col-md-6 col-lg-3 ftco-animate">
+                        {{-- Mở Form cho từng sản phẩm để dùng cho AJAX Add to Cart --}}
+                        <form>
+                            @csrf
+                            <input type="hidden" value="{{ $product->product_id }}"
+                                class="cart_product_id_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_name }}"
+                                class="cart_product_name_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_image }}"
+                                class="cart_product_image_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_price }}"
+                                class="cart_product_price_{{ $product->product_id }}">
+                            <input type="hidden" value="{{ $product->product_quantity }}"
+                                class="cart_product_quantity_{{ $product->product_id }}">
+                            <input type="hidden" value="1" class="cart_product_qty_{{ $product->product_id }}">
+
+                            <div class="product">
+                                <a href="{{ route('detailProduct', ['id' => $product->product_id]) }}" class="img-prod">
+                                    <img class="img-fluid" style="width:253px; height:202px;"
+                                        src="/upload/product/{{ $product->product_image }}"
+                                        alt="Hình ảnh {{ $product->product_name }}">
+                                    {{-- Bạn có thể thêm logic cho tag giảm giá ở đây nếu cần --}}
+                                    {{-- <span class="status">30%</span> --}}
+                                    <div class="overlay"></div>
+                                </a>
+                                <div class="text py-3 pb-4 px-3 text-center">
+                                    <h3><a
+                                            href="{{ route('detailProduct', ['id' => $product->product_id]) }}">{{ $product->product_name }}</a>
+                                    </h3>
+                                    <div class="d-flex">
+                                        <div class="pricing">
+                                            <p class="price">
+                                                {{-- Chỉ hiển thị một giá, không có giá gạch ngang --}}
+                                                <span class="price-sale">{{ number_format($product->product_price) }}
+                                                    VNĐ</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="bottom-area d-flex px-3">
+                                        <div class="m-auto d-flex">
+                                            {{-- Giữ nguyên logic kiểm tra đăng nhập của bạn --}}
+                                            @php
+                                                $customerId = Session::get('customer_id');
+                                            @endphp
+                                            @if ($customerId)
+                                                {{-- Nút Thêm giỏ hàng cho người đã đăng nhập (dùng cho AJAX) --}}
+                                                <button type="button" name="add-to-cart"
+                                                    data-id_product="{{ $product->product_id }}"
+                                                    class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
+                                                    <span><i class="ion-ios-cart"></i></span>
+                                                </button>
+                                            @else
+                                                {{-- Nút Thêm giỏ hàng chuyển đến trang đăng nhập --}}
+                                                <a href="{{ URL::to('/login-checkout') }}"
+                                                    class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                                    <span><i class="ion-ios-cart"></i></span>
+                                                </a>
+                                            @endif
+
+                                            {{-- Nút xem chi tiết (có thể giữ hoặc bỏ) --}}
+                                            <a href="{{ route('detailProduct', ['id' => $product->product_id]) }}"
+                                                class="add-to-cart d-flex justify-content-center align-items-center text-center">
+                                                <span><i class="ion-ios-menu"></i></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            @endif
-                        @endforeach
+                            </div>
+                        </form> {{-- Đóng Form --}}
                     </div>
-                </div>
+                @endforeach
+                {{-- Kết thúc vòng lặp --}}
             </div>
         </div>
     </section>
 
-    <style>
-        .client_logo .single_client_logo {
-            height: 50px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-left: 1px solid #edeff2;
-            width: 100%;
-            float: left;
-            border-bottom: 1px solid #edeff2;
-        }
-        .client_logo {
-            padding: 60px 0;
-            background: #f8f9fa;
-        }
-        .single_client_logo {
-            margin: 0 15px;
-        }
-        .brand-item {
-            background: #ffffff;
-            border-radius: 8px;
-            height: 100px;
-            width: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-    </style>
+
+    <section class="ftco-section ftco-partner">
+        <div class="container">
+            {{-- Thêm tiêu đề cho đồng bộ với các section khác --}}
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-7 heading-section ftco-animate text-center">
+                    <span class="subheading">Đối Tác Của Chúng Tôi</span>
+                    <h2 class="mb-4">Thương Hiệu Nổi Bật</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                {{-- Bắt đầu vòng lặp để hiển thị các thương hiệu --}}
+                @foreach ($brand as $item)
+                    {{-- Chỉ hiển thị thương hiệu có trạng thái đang hoạt động --}}
+                    @if ($item->brand_status == 1)
+                    <div class="col-sm ftco-animate">
+                        <a href="#" class="partner">
+                            <img src="/upload/brand/{{ $item->brand_image }}" class="img-fluid" alt="{{ $item->brand_name }}">
+                        </a>
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </section>
 @endsection
 @section('javascript')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('.add-to-cart').click(function () {
+        $(document).ready(function() {
+            $('.add-to-cart').click(function() {
                 debugger;
                 var id = $(this).data('id_product');
                 var cart_product_id = $('.cart_product_id_' + id).val();
@@ -233,10 +410,12 @@
                 var cart_product_qty = $('.cart_product_qty_' + id).val();
                 var _token = $('input[name="_token"]').val();
                 if (cart_product_qty >= cart_product_quantity) {
-                    toastr["error"]('Số lượng đặt lớn hơn số lượng còn trong kho, Vui lòng chọn số lượng nhỏ hơn', +cart_product_quantity);
+                    toastr["error"](
+                        'Số lượng đặt lớn hơn số lượng còn trong kho, Vui lòng chọn số lượng nhỏ hơn', +
+                        cart_product_quantity);
                 } else {
                     $.ajax({
-                        url: '{{url('/add-cart-ajax')}}',
+                        url: '{{ url('/add-cart-ajax') }}',
                         method: 'POST',
                         data: {
                             cart_product_id: cart_product_id,
@@ -247,19 +426,19 @@
                             cart_product_qty: cart_product_qty,
                             _token: _token
                         },
-                        success: function () {
+                        success: function() {
                             Swal.fire({
-                                title: "Đã thêm sản phẩm vào giỏ hàng",
-                                text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
-                                icon: "success",
-                                showCancelButton: true,
-                                confirmButtonText: "Đi đến giỏ hàng",
-                                cancelButtonText: "Xem tiếp",
-                                dangerMode: true,
-                            })
+                                    title: "Đã thêm sản phẩm vào giỏ hàng",
+                                    text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                                    icon: "success",
+                                    showCancelButton: true,
+                                    confirmButtonText: "Đi đến giỏ hàng",
+                                    cancelButtonText: "Xem tiếp",
+                                    dangerMode: true,
+                                })
                                 .then((willDelete) => {
                                     if (willDelete) {
-                                        window.location.href = "{{url('/cart')}}";
+                                        window.location.href = "{{ url('/cart') }}";
                                     }
                                 });
                         }
@@ -320,7 +499,7 @@
                 localStorage.setItem('data', '[]');
             }
             var old_data = JSON.parse(localStorage.getItem('data'));
-            var matches = $.grep(old_data, function (obj) {
+            var matches = $.grep(old_data, function(obj) {
                 return obj.id == id && obj.customerId == customerId;
             })
             if (matches.length) {
@@ -332,5 +511,4 @@
             localStorage.setItem('data', JSON.stringify(old_data));
         }
     </script>
-
 @endsection

@@ -1,125 +1,106 @@
 @extends('layout')
 @section('content')
-    <!--================Home Banner Area =================-->
-    <!-- breadcrumb start-->
-    <section class="breadcrumb breadcrumb_bg">
+    <div class="hero-wrap hero-bread" style="background-image: url('{{ asset('/frontend/images/bg_1.jpg') }}');">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Danh sách bài viết</h2>
-                            <p>Trang chủ <span>-</span> Bài viết</p>
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs"><span class="mr-2"><a href="{{ URL::to('/') }}">Trang chủ</a></span> <span>Tin
+                            tức</span></p>
+                    <h1 class="mb-0 bread">Tin Tức & Mẹo Vặt</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 ftco-animate">
+                    <div class="row">
+                        @foreach ($posts as $post)
+                            <div class="col-md-12 d-flex ftco-animate">
+                                <div class="blog-entry align-self-stretch d-md-flex">
+                                    <a href="{{ route('postDetail', ['slug' => $post->post_slug]) }}" class="block-20"
+                                        style="background-image: url('{{ asset('/upload/post/' . $post->post_image) }}');"></a>
+                                    <div class="text d-block pl-md-4">
+                                        <div class="meta mb-3">
+                                            <div><a href="#">{{ $post->created_at->format('d/m/Y') }}</a></div>
+                                            <div><a href="#">Admin</a></div>
+                                            <div><a href="#" class="meta-chat"><i class="ion-ios-eye"></i>
+                                                    {{ $post->post_view }}</a></div>
+                                        </div>
+                                        <h3 class="heading"><a
+                                                href="{{ route('postDetail', ['slug' => $post->post_slug]) }}">{{ $post->post_title }}</a>
+                                        </h3>
+                                        <p class="post-desc">{!! $post->post_description !!}</p>
+                                        <p><a href="{{ route('postDetail', ['slug' => $post->post_slug]) }}"
+                                                class="btn btn-primary py-2 px-3">Đọc thêm</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col text-center">
+                            <div class="block-27">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    <!-- breadcrumb start-->
-
-    <!--================Blog Area =================-->
-    <section class="blog_area padding_top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mb-5 mb-lg-0">
-                    <div class="blog_left_sidebar">
-                        @foreach($posts as $post)
-                            <article class="blog_item">
-                                <div class="blog_item_img">
-                                    <img class="card-img rounded-0" src="/upload/post/{{$post->post_image}}" alt="">
-                                    <a href="#" class="blog_item_date">
-                                        <h3>15</h3>
-                                        <p>Jan</p>
-                                    </a>
-                                </div>
-
-                                <div class="blog_details">
-                                    <a class="d-inline-block" href="{{route('postDetail',['slug'=>$post->post_slug])}}">
-                                        <h2>{{$post->post_title}}</h2>
-                                    </a>
-                                    <p class="post-desc">{!! $post->post_description !!}</p>
-                                    <ul class="blog-info-link">
-                                        <li><a href="#"><i class="far fa-user"></i> Lượt xem: {{$post->post_view}}</a>
-                                        </li>
-                                        <li><a href="{{route('postDetail',['slug'=>$post->post_slug])}}"><i
-                                                    class="far fa-edit"></i> Xem chi tiết</a></li>
-                                    </ul>
-                                </div>
-                            </article>
-
-                        @endforeach
-                        <nav class="blog-pagination justify-content-center d-flex">
-                            <ul class="pagination">
-                                <li class="page-item">
-                                    <a href="{{$posts->previousPageUrl()}}" class="page-link {{$posts->onFirstPage() ? 'disabled' : ''}}" aria-label="Previous">
-                                        <i class="ti-angle-left"></i>
-                                    </a>
-                                </li>
-                                @for ($i = 1; $i <= $posts->lastPage(); $i++)
-                                <li class="page-item">
-                                    <a href="{{$posts->url($i)}}" class="page-link {{$posts->currentPage() === $i ? 'active' : ''}}">{{$i}}</a>
-                                </li>
-                                @endfor
-                                <li class="page-item">
-                                    <a href="{{$posts->nextPageUrl()}}" class="page-link {{$posts->hasMorePages() ? '' : 'disabled'}}" aria-label="Next">
-                                        <i class="ti-angle-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box">
+                        <form action="#" class="search-form">
+                            <div class="form-group">
+                                <span class="icon ion-ios-search"></span>
+                                <input type="text" class="form-control" placeholder="Tìm kiếm...">
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="blog_right_sidebar">
-                        <aside class="single_sidebar_widget post_category_widget">
-                            <h4 class="widget_title">Danh mục bài viết</h4>
-                            <ul class="list cat-list">
-                                @foreach($categorypost as $categorypost)
-                                <li>
-                                    <a href="{{route('detaiCategoryPost', ['slug' => $categorypost->cate_post_slug])}}" class="d-flex">
-                                        <p>{{$categorypost->cate_post_name}}</p>
-                                        <p>(37)</p>
-                                    </a>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </aside>
-
-                        <aside class="single_sidebar_widget popular_post_widget">
-                            <h3 class="widget_title">Bài viết gần đây</h3>
-
-                            @foreach($recent_posts as $post)
-                                <div class="media post_item">
-                                    <img width="80px" src="/upload/post/{{$post->post_image}}" alt="{{ $post->post_title }}">
-                                    <div class="media-body">
-                                        <a href="{{ route('postDetail', ['slug' => $post->post_slug]) }}">
-                                            <h3>{{ $post->post_title }}</h3>
-                                        </a>
-                                        <p>{{ $post->created_at->diffForHumans() }}</p>
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading">Danh mục bài viết</h3>
+                        <ul class="categories">
+                            @foreach ($categorypost as $cate)
+                                <li><a href="{{ route('detaiCategoryPost', ['slug' => $cate->cate_post_slug]) }}">{{ $cate->cate_post_name }}
+                                        </a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading">Bài viết gần đây</h3>
+                        @foreach ($recent_posts as $recent)
+                            <div class="block-21 mb-4 d-flex">
+                                <a class="blog-img mr-4"
+                                    style="background-image: url({{ asset('/upload/post/' . $recent->post_image) }});"></a>
+                                <div class="text">
+                                    <h3 class="heading-1"><a
+                                            href="{{ route('postDetail', ['slug' => $recent->post_slug]) }}">{{ $recent->post_title }}</a>
+                                    </h3>
+                                    <div class="meta">
+                                        <div><a href="#"><span class="icon-calendar"></span>
+                                                {{ $recent->created_at->diffForHumans() }}</a></div>
                                     </div>
                                 </div>
-                            @endforeach
-
-                        </aside>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--================Blog Area =================-->
 @endsection
 @section('javascript')
- <script type="text/javascript">
-     $(document).ready(function () {
-         $(".post-desc").each(function () {
-             debugger
-             let content = $(this).html().trim(); // Lấy nội dung giữ nguyên HTML
-             if (content.length > 200) {
-                 let shortText = content.substring(0, 200);
-                 $(this).html(shortText + "...");
-             }
-         });
-     });
- </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".post-desc").each(function() {
+                let content = $(this).text().trim(); // Dùng .text() để loại bỏ tag HTML khi đo độ dài
+                if (content.length > 150) { // Rút ngắn hơn một chút cho phù hợp với giao diện mới
+                    let shortText = content.substring(0, 150);
+                    $(this).text(shortText + "...");
+                }
+            });
+        });
+    </script>
 @endsection

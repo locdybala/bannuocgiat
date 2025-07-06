@@ -14,33 +14,78 @@
                     <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Sửa khách hàng</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('customer.update', $customer->id) }}" method="POST" autocomplete="off">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Họ tên <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}" required/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" required/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{ $customer->phone }}" required/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Trạng thái <span class="text-danger">*</span></label>
-                            <select id="status" name="status" class="form-select" required>
-                                <option value="1" @if($customer->status == 1) selected @endif>Hoạt động</option>
-                                <option value="0" @if($customer->status == 0) selected @endif>Khóa</option>
-                            </select>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-warning text-dark"><i class="bi bi-pencil-square me-1"></i>Sửa</button>
-                            <a href="{{ route('customer.index') }}" class="btn btn-outline-secondary">Huỷ</a>
-                        </div>
-                    </form>
+                    <form action="{{ route('updateCustomer',['id'=>$customer->customer_id,'admin'=>1]) }}"
+                        method="POST">
+                      @csrf
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_id">Mã khách hàng</label>
+                                  <input type="text" class="form-control" readonly
+                                         value="{{ $customer->customer_id }}"
+                                         id="customer_id" name="customer_id"/>
+
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_name">Tên khách hàng</label>
+                                  <input type="text" class="form-control"
+                                         value="{{ $customer->customer_name }}"
+                                         id="customer_name" name="customer_name"/>
+
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_name">Địa chỉ email</label>
+                                  <input type="text" class="form-control"
+                                         value="{{ $customer->customer_email }}" id="basic-default-name"
+                                         name="customer_email"/>
+
+
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_name">Ngày sinh</label>
+                                  <input type="date" class="form-control"
+                                         value="{{ $customer->customer_birthday }}" id="basic-default-name"
+                                         name="customer_birthday"/>
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_name">Số điện thoại</label>
+                                  <input type="text" class="form-control" value="{{ $customer->customer_phone }}"
+                                         id="basic-default-name" name="customer_phone"/>
+
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_name">Địa chỉ</label>
+                                  <input type="text" class="form-control" value="{{ $customer->customer_address }}"
+                                         id="basic-default-name" name="customer_address"/>
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <label class="floating-label" for="customer_vip">Loại khách hàng</label>
+                                  <select name="customer_vip" class="form-control">
+                                      <option @if($customer->customer_vip == 1) selected @endif value="1">Khách hàng Vip</option>
+                                      <option @if($customer->customer_vip == 0) selected @endif value="0">Khách hàng thường</option>
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <div class="form-group">
+                                  <button type="submit" class="btn btn-primary">Sửa</button>
+                                  <a href="/admin/customer/all_customer" class="btn btn-default">Huỷ</a>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
                 </div>
             </div>
         </div>

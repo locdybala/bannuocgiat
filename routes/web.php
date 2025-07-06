@@ -184,6 +184,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/view-order/{order_code}', [OrderController::class, 'view_order'])->name('view_order');
         Route::get('/print-order/{order_code}', [OrderController::class, 'print_order'])->name('print_order');
         Route::post('/cancel_order/{order_code}', [OrderController::class, 'cancel_order'])->name('cancel_order');
+        Route::get('/delete-order/{order_code}', [OrderController::class, 'delete_order'])->name('delete_order');
         Route::post('/update-order-qty', [OrderController::class, 'update_order_qty']);
         Route::post('/update-qty', [OrderController::class, 'update_qty']);
     });

@@ -1,81 +1,104 @@
 @extends('layout')
 @section('content')
-    <section class="breadcrumb breadcrumb_bg">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Đăng ký tài khoản</h2>
-                            <p>Trang Chủ <span>-</span> Đăng ký</p>
-                        </div>
-                    </div>
-                </div>
+<div class="hero-wrap hero-bread" style="background-image: url('/frontend/images/bg_1.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{{ URL::to('/') }}">Trang chủ</a></span>
+                    <span>Đăng ký</span>
+                </p>
+                <h1 class="mb-0 bread">Tạo Tài Khoản Mới</h1>
             </div>
         </div>
-    </section>
-    <!-- Checkout Page Start -->
-    <section class="login_part padding_top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>Bạn đã có tài khoản?</h2>
-                            <p>Hãy đăng nhập vào hệ thống để khám phá cửa hàng</p>
-                            <a href="{{route('loginCustomer')}}" class="btn_3">Đăng nhập</a>
+    </div>
+</div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 ftco-animate">
+                <div class="billing-form">
+                    <h3 class="mb-4 billing-heading">Điền thông tin để tạo tài khoản</h3>
+
+                    {{-- Hiển thị thông báo thành công hoặc thất bại --}}
+                    @if(session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                            @php session()->forget('success'); @endphp
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Xin chào bạn ! <br>
-                                Đăng ký tài khoản ngay bây giờ</h3>
-                            @if(session()->has('success'))
-                                <div class="alert alert-success alert-block">
-                                    {{session()->get('success')}}
-                                    @php session()->forget('success') @endphp
-                                </div>
-                            @elseif(session()->has('error'))
-                                <div class="alert alert-danger alert-block">
-                                    {{session()->get('error')}}
-                                    @php session()->forget('error') @endphp
-                                </div>
-                            @endif
-                            <form action="{{route('addCustomer')}}" method="POST" enctype="multipart/form-data">
-                                {{csrf_field()}}
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" id="customer_name" name="customer_name" class="form-control" placeholder="Họ và tên" value="{{old('customer_name')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" id="customer_email" name="customer_email" class="form-control" placeholder="Nhập tài khoản email" value="{{old('email_account')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" id="password_account" name="password_account" class="form-control" placeholder="Nhập mật khẩu" value="{{old('password_account')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="date" id="customer_birthday" name="customer_birthday" class="form-control" value="{{old('customer_birthday')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" id="customer_phone" name="customer_phone" class="form-control" placeholder="Số điện thoại" value="{{old('customer_phone')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="file" id="customer_avatar" name="customer_avatar" class="form-control">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" id="customer_address" name="customer_address" class="form-control" placeholder="Địa chỉ" value="{{old('customer_address')}}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <button type="submit" class="btn_3">Đăng ký</button>
-                                </div>
-                            </form>
+                    @elseif(session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                             @php session()->forget('error'); @endphp
                         </div>
-                    </div>
+                    @endif
+
+                    {{-- Đảm bảo giữ nguyên action, method và enctype --}}
+                    <form action="{{route('addCustomer')}}" method="POST" enctype="multipart/form-data">
+                        {{ csrf_field() }}
+                        <div class="row align-items-end">
+                            {{-- Sắp xếp các trường thành 2 cột cho gọn --}}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="customer_name">Họ và tên</label>
+                                    <input type="text" name="customer_name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" value="{{old('customer_name')}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="customer_email">Địa chỉ Email</label>
+                                    <input type="email" name="customer_email" class="form-control" placeholder="your.email@example.com" value="{{old('customer_email')}}" required>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="password_account">Mật khẩu</label>
+                                    <input type="password" name="password_account" class="form-control" placeholder="Tối thiểu 6 ký tự" required>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="customer_phone">Số điện thoại</label>
+                                    <input type="text" name="customer_phone" class="form-control" placeholder="Số điện thoại của bạn" value="{{old('customer_phone')}}" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="customer_birthday">Ngày sinh</label>
+                                    <input type="date" name="customer_birthday" class="form-control" value="{{old('customer_birthday')}}">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="customer_address">Địa chỉ</label>
+                                    <input type="text" name="customer_address" class="form-control" placeholder="Số nhà, tên đường, phường/xã..." value="{{old('customer_address')}}">
+                                </div>
+                            </div>
+                             <div class="w-100"></div>
+                             <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="customer_avatar">Ảnh đại diện (tùy chọn)</label>
+                                    <input type="file" name="customer_avatar" class="form-control-file">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary py-3 px-4">Đăng ký</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form></div>
+
+                <div class="text-center mt-4">
+                    <p>Bạn đã có tài khoản? <a href="{{route('loginCustomer')}}">Đăng nhập tại đây</a></p>
                 </div>
-            </div>
-        </div>
-    </section>
+            </div> </div>
+    </div>
+</section>
 @endsection
 @section('javascript')
     <script type="text/javascript">

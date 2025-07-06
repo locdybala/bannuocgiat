@@ -230,7 +230,7 @@
     <!-- Datepicker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css">
-    
+
     <script>
         $(function() {
             // Datepicker initialization
@@ -291,7 +291,7 @@
             $('#btn-dashboard-filter').click(function() {
                 const form_date = $('#datepicker').val();
                 const to_date = $('#datepicker2').val();
-                
+
                 if (!form_date || !to_date) {
                     toastr.warning('Vui lòng chọn đầy đủ ngày bắt đầu và kết thúc!');
                     return;
@@ -319,7 +319,7 @@
             // Dashboard filter change
             $('.dashboard-filter').change(function() {
                 const dashboard_value = $(this).val();
-                
+
                 if (!dashboard_value) return;
 
                 $.ajax({

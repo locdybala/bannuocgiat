@@ -393,4 +393,36 @@ class OrderController extends Controller
         $order_details->product_sales_quantity = $data['order_qty'];
         $order_details->save();
     }
+
+    public function delete_order($order_code)
+    {
+        try {
+            // Tìm đơn hàng theo order_code
+            $order = Order::where('order_code', $order_code)->first();
+
+            if (!$order) {
+                Session::put('error', 'Không tìm thấy đơn hàng');
+                return redirect()->route('all_order');
+            }
+
+            // Kiểm tra trạng thái đơn hàng - chỉ cho phép xóa đơn hàng mới (status = 1)
+            if ($order->order_status != 1) {
+                Session::put('error', 'Chỉ có thể xóa đơn hàng mới');
+                return redirect()->route('all_order');
+            }
+
+            // Xóa chi tiết đơn hàng trước
+            OrderDetails::where('order_code', $order_code)->delete();
+
+            // Xóa đơn hàng
+            $order->delete();
+
+            Session::put('success', 'Xóa đơn hàng thành công');
+            return redirect()->route('all_order');
+
+        } catch (\Exception $e) {
+            Session::put('error', 'Có lỗi xảy ra khi xóa đơn hàng');
+            return redirect()->route('all_order');
+        }
+    }
 }

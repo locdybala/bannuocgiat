@@ -6,69 +6,103 @@
     <title>Đặt lại mật khẩu</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            background-color: #f4f7f6;
             margin: 0;
             padding: 0;
+            color: #555;
         }
-        .container {
+        .email-container {
             max-width: 600px;
             margin: 40px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+        }
+        .email-header {
+            background-color: #007bff; /* Một màu xanh tươi mát, sạch sẽ */
+            padding: 30px 20px;
             text-align: center;
         }
-        .logo img {
+        .email-header img {
             max-width: 120px;
+            filter: brightness(0) invert(1); /* Đổi màu logo thành trắng để nổi bật trên nền xanh */
+        }
+        .email-body {
+            padding: 30px 40px;
+            text-align: left;
+            line-height: 1.7;
         }
         h3 {
-            color: #333;
-            margin-bottom: 10px;
+            color: #0056b3; /* Màu xanh đậm hơn */
+            font-size: 22px;
+            margin-top: 0;
+            margin-bottom: 20px;
         }
         p {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 16px;
+            margin-bottom: 20px;
         }
         .btn-reset {
             display: inline-block;
-            padding: 12px 24px;
+            padding: 14px 28px;
             margin: 20px 0;
-            background: #28a745;
-            color: white;
+            background-image: linear-gradient(45deg, #007bff, #0056b3);
+            color: white !important; /* Quan trọng để ghi đè màu mặc định của link */
             text-decoration: none;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
         }
         .btn-reset:hover {
-            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
         }
-        .footer {
-            margin-top: 20px;
+        .link-fallback {
+            word-wrap: break-word;
+            font-size: 13px;
+            color: #007bff;
+        }
+        .email-footer {
+            background-color: #f8f9fa;
+            padding: 20px 40px;
+            text-align: center;
             font-size: 12px;
-            color: #777;
+            color: #888;
+            border-top: 1px solid #e0e0e0;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="logo">
-        <img src="{{asset('frontend/img/logo/logo.png')}}" alt="Logo Cửa hàng Điện thoại">
+    <div class="email-container">
+        <div class="email-header">
+            {{-- Giữ nguyên link logo của bạn --}}
+            <img src="{{$message->embed(public_path('frontend/img/logo/logo.png'))}}" alt="Logo Cửa hàng">
+        </div>
+        <div class="email-body">
+            <h3>Yêu cầu đặt lại mật khẩu</h3>
+            <p>Xin chào,</p>
+            <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn tại <strong>Cửa Hàng Nước Giặt Sạch Thơm</strong>. Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này một cách an toàn.</p>
+            <p>Để tiếp tục, bạn vui lòng nhấn vào nút bên dưới:</p>
+
+            <div style="text-align: center;">
+                 {{-- Giữ nguyên biến link của bạn --}}
+                <a href="{{ $data['body'] }}" class="btn-reset">Đặt Lại Mật Khẩu</a>
+            </div>
+
+            <p style="margin-top: 30px; font-size: 14px;">Nếu nút trên không hoạt động, vui lòng sao chép và dán liên kết sau vào trình duyệt của bạn:</p>
+            <p><a href="{{ $data['body'] }}" class="link-fallback">{{ $data['body'] }}</a></p>
+
+            <p style="font-size: 14px;"><strong>Lưu ý:</strong> Vì lý do bảo mật, liên kết này sẽ hết hạn sau 60 phút.</p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; {{ date('Y') }} Cửa Hàng Nước Giặt Sạch Thơm. Mọi quyền được bảo lưu.</p>
+        </div>
     </div>
-    <h3>Yêu cầu đặt lại mật khẩu</h3>
-    <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
-    <p>Để đặt lại mật khẩu, vui lòng nhấn vào nút dưới đây:</p>
-    <a href="{{$data['body']}}" class="btn-reset">Đặt lại mật khẩu</a>
-    <p>Nếu nút không hoạt động, bạn có thể sao chép và dán liên kết này vào trình duyệt:</p>
-    <p><a href="{{$data['body']}}">{{$data['body']}}</a></p>
-    <p><strong>Lưu ý:</strong> Liên kết này sẽ hết hạn trong 3 giờ. Nếu bạn cần yêu cầu mới, vui lòng truy cập <a href="http://127.0.0.1:8000/forgot_pass">trang đặt lại mật khẩu</a>.</p>
-    <div class="footer">
-        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
-        <p><strong>Cửa hàng Điện thoại</strong></p>
-    </div>
-</div>
 </body>
 </html>

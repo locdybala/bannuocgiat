@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{$title ?? 'Admin Dashboard'}} - Bán Nước Giặt</title>
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -260,15 +260,15 @@
             .sidebar {
                 transform: translateX(-100%);
             }
-            
+
             .sidebar.show {
                 transform: translateX(0);
             }
-            
+
             .header {
                 left: 0;
             }
-            
+
             .main-content {
                 margin-left: 0;
             }
@@ -381,15 +381,15 @@
             .sidebar {
                 transform: translateX(-100%);
             }
-            
+
             .sidebar.show {
                 transform: translateX(0);
             }
-            
+
             .header {
                 left: 0;
             }
-            
+
             .main-content {
                 margin-left: 0;
             }
@@ -452,14 +452,14 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="{{route('dashboard')}}" class="logo">
-                <img src="{{asset('upload/info/logo.png')}}" alt="Logo">
-                <span class="logo-text">Admin Panel</span>
+                <img src="{{asset('frontend/images/logo/logo.jpg')}}" alt="Logo">
+                <span class="logo-text">Admin</span>
             </a>
         </div>
-        
+
         <div class="sidebar-nav">
             <div class="nav-caption">Cửa hàng</div>
-            
+
             <div class="nav-item">
                 <a href="{{route('dashboard')}}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house-door"></i>
@@ -476,7 +476,7 @@
 
             @if(auth()->user()->hasAnyRoles(['admin', 'user']))
             <div class="nav-caption">Quản lý sản phẩm</div>
-            
+
             <div class="nav-item">
                 <a href="{{route('all_category')}}" class="nav-link {{ request()->routeIs('all_category') ? 'active' : '' }}">
                     <i class="bi bi-tags"></i>
@@ -530,7 +530,7 @@
 
             @if(auth()->user()->hasAnyRoles(['admin', 'user']))
             <div class="nav-caption">Quản lý hệ thống</div>
-            
+
             <div class="nav-item">
                 <a href="{{route('all_coupon')}}" class="nav-link {{ request()->routeIs('all_coupon') ? 'active' : '' }}">
                     <i class="bi bi-ticket-perforated"></i>
@@ -579,7 +579,7 @@
             @endif
 
             <div class="nav-caption">Bán hàng</div>
-            
+
             @if(auth()->user()->hasAnyRoles(['admin', 'user']))
             <div class="nav-item">
                 <a href="{{route('all_order')}}" class="nav-link {{ request()->routeIs('all_order') ? 'active' : '' }}">
@@ -618,7 +618,7 @@
 
             @hasrole('author')
             <div class="nav-caption">Nội dung</div>
-            
+
             <div class="nav-item">
                 <a href="{{route('all_category_post')}}" class="nav-link {{ request()->routeIs('all_category_post') ? 'active' : '' }}">
                     <i class="bi bi-collection"></i>
@@ -644,12 +644,12 @@
             </button>
             <h4 class="mb-0 ms-3">{{$title ?? 'Dashboard'}}</h4>
         </div>
-        
+
         <div class="header-right">
             <div class="dropdown user-dropdown">
-                <img src="{{asset('backend/assets/images/user/avatar-1.jpg')}}" 
-                     class="user-avatar" 
-                     data-bs-toggle="dropdown" 
+                <img src="{{asset('backend/assets/images/user/avatar-1.jpg')}}"
+                     class="user-avatar"
+                     data-bs-toggle="dropdown"
                      alt="User Avatar">
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><h6 class="dropdown-header">{{Auth::user()->name}}</h6></li>
@@ -672,14 +672,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
+
     <script>
         // Sidebar Toggle
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const header = document.getElementById('header');
             const mainContent = document.getElementById('mainContent');
-            
+
             sidebar.classList.toggle('collapsed');
             header.classList.toggle('sidebar-collapsed');
             mainContent.classList.toggle('sidebar-collapsed');

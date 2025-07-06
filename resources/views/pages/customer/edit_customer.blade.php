@@ -1,130 +1,112 @@
 @extends('layout')
 @section('content')
-    <section class="breadcrumb breadcrumb_bg">
+    <div class="hero-wrap hero-bread" style="background-image: url('/frontend/images/bg_1.jpg');">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Thay đổi thông tin</h2>
-                            <p>Trang chủ <span>-</span> Thông tin khách hàng</p>
-                        </div>
-                    </div>
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <p class="breadcrumbs">
+                        <span class="mr-2"><a href="{{ URL::to('/') }}">Trang chủ</a></span>
+                        <span>Tài khoản của tôi</span>
+                    </p>
+                    <h1 class="mb-0 bread">Thông Tin Tài Khoản</h1>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Profile Page Start -->
-    <div class="container-fluid fruite py-5">
-        <div class="container py-5">
-            <div class="row g-4">
-                <!-- Sidebar -->
-                <div class="col-lg-3">
-                    <div class="p-4 bg-light rounded shadow-sm">
-                        <h4 class="mb-3">Quản lý tài khoản</h4>
-                        <ul class="list-group">
-                            <li class="list-group-item border-0">
-                                <a href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}" class="text-dark">
-                                    <i class="fas fa-user me-2"></i>Thông tin tài khoản
-                                </a>
-                            </li>
-                            <li class="list-group-item border-0">
-                                <a href="{{ route('history') }}" class="text-dark">
-                                    <i class="fas fa-history me-2"></i>Lịch sử mua hàng
-                                </a>
-                            </li>
-                            <li class="list-group-item border-0">
-                                <a href="{{ route('logout') }}" class="text-dark">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                                </a>
+    </div>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sidebar-box ftco-animate">
+                        <div class="profile-info text-center mb-4">
+                            <div class="profile-avatar mb-2">
+                                @if ($customer->customer_avatar)
+                                    <img src="{{ asset('upload/customer/' . $customer->customer_avatar) }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @else
+                                    {{-- Ảnh mặc định nếu người dùng chưa có avatar --}}
+                                    <img src="{{ asset('frontend/images/default-avatar.png') }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @endif
+                            </div>
+                            <h5 class="profile-name">{{ $customer->customer_name }}</h5>
+                        </div>
+                        <ul class="categories">
+                            {{-- Dùng icon ion-ios-... của theme Vegefoods --}}
+                            <li class="active"><a
+                                    href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i
+                                            class="ion-ios-person"></i> Thông tin tài khoản</span></a></li>
+                            <li><a href="{{ route('history') }}"><span><i class="ion-ios-list-box"></i> Lịch sử mua
+                                        hàng</span></a></li>
+                            <li><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out"></i> Đăng xuất</span></a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- Form chỉnh sửa thông tin -->
-                <div class="col-lg-9">
-                    <div class="p-4 bg-light rounded shadow-sm">
-                        <h3 class="mb-4">Thay đổi thông tin khách hàng</h3>
+                <div class="col-md-9">
+                    <div class="billing-form ftco-animate">
+                        <h3 class="mb-4 billing-heading">Cập nhật thông tin tài khoản</h3>
 
-                        @if(session()->has('message'))
+                        @if (session()->has('message'))
                             <div class="alert alert-success">{{ session()->get('message') }}</div>
                         @elseif(session()->has('error'))
                             <div class="alert alert-danger">{{ session()->get('error') }}</div>
                         @endif
 
+                        {{-- Giữ nguyên action và enctype --}}
                         <form action="{{ route('addCustomer') }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="row">
-                                <div class="col-md-6">
-                                    <label for="customer_name" class="form-label">Họ tên <sup>*</sup></label>
-                                    <input type="text" id="customer_name" name="customer_name" class="form-control"
-                                           value="{{ $customer->customer_name }}" placeholder="Họ và tên">
+                                <div class="col-md-6 form-group">
+                                    <label for="customer_name">Họ và tên</label>
+                                    <input type="text" name="customer_name" class="form-control"
+                                        value="{{ $customer->customer_name }}" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="customer_email" class="form-label">Email <sup>*</sup></label>
-                                    <input type="email" id="customer_email" name="customer_email" class="form-control"
-                                           value="{{ $customer->customer_email }}" placeholder="Nhập email">
+                                <div class="col-md-6 form-group">
+                                    <label for="customer_email">Email</label>
+                                    <input type="email" name="customer_email" class="form-control"
+                                        value="{{ $customer->customer_email }}" required>
                                 </div>
-                            </div>
-
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <label for="password_account" class="form-label">Mật khẩu</label>
-                                    <input type="password" id="password_account" name="password_account"
-                                           class="form-control" placeholder="Nhập mật khẩu">
+                                <div class="w-100"></div>
+                                <div class="col-md-6 form-group">
+                                    <label for="password_account">Mật khẩu mới</label>
+                                    <input type="password" name="password_account" class="form-control"
+                                        placeholder="Bỏ trống nếu không muốn đổi">
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="customer_birthday" class="form-label">Ngày sinh <sup>*</sup></label>
-                                    <input type="date" id="customer_birthday" name="customer_birthday"
-                                           class="form-control" value="{{ $customer->customer_birthday }}">
+                                <div class="col-md-6 form-group">
+                                    <label for="customer_phone">Số điện thoại</label>
+                                    <input type="text" name="customer_phone" class="form-control"
+                                        value="{{ $customer->customer_phone }}" required>
                                 </div>
-                            </div>
-
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <label for="customer_phone" class="form-label">Số điện thoại <sup>*</sup></label>
-                                    <input type="text" id="customer_phone" name="customer_phone"
-                                           class="form-control" value="{{ $customer->customer_phone }}"
-                                           placeholder="Số điện thoại">
+                                <div class="w-100"></div>
+                                <div class="col-md-12 form-group">
+                                    <label for="customer_address">Địa chỉ</label>
+                                    <input type="text" name="customer_address" class="form-control"
+                                        value="{{ $customer->customer_address }}">
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="customer_address" class="form-label">Địa chỉ <sup>*</sup></label>
-                                    <input type="text" id="customer_address" name="customer_address"
-                                           class="form-control" value="{{ $customer->customer_address }}"
-                                           placeholder="Địa chỉ">
+                                <div class="w-100"></div>
+                                <div class="col-md-12 form-group">
+                                    <label for="customer_avatar">Thay đổi ảnh đại diện</label>
+                                    <input type="file" name="customer_avatar" class="form-control-file">
+                                </div>
+                                <div class="w-100"></div>
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary py-3 px-4">Lưu thay đổi</button>
                                 </div>
                             </div>
-
-                            <div class="mt-3">
-                                <label for="customer_avatar" class="form-label">Avatar</label>
-                                <input type="file" id="customer_avatar" name="customer_avatar" class="form-control">
-                                @if($customer->customer_avatar)
-                                    <div class="mt-2">
-                                        <img src="{{ asset('upload/customer/' . $customer->customer_avatar) }}"
-                                             class="rounded-circle border shadow" width="100" height="100">
-                                    </div>
-                                @else
-                                    <p class="text-muted">Chưa có ảnh</p>
-                                @endif
-                            </div>
-
-                            <button type="submit" id="btnSubmit" class="btn btn-primary mt-4">
-                                <i class="fas fa-save"></i> Cập nhật
-                            </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection
 
 @section('javascript')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#btnSubmit").click(function () {
+        $(document).ready(function() {
+            $("#btnSubmit").click(function() {
                 var customer_name = $("#customer_name").val();
                 var customer_email = $("#customer_email").val();
                 var customer_birthday = $("#customer_birthday").val();

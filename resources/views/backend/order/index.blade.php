@@ -2,7 +2,7 @@
 @section('content')
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="bi bi-house-door"></i></a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bi bi-house-door"></i></a></li>
             <li class="breadcrumb-item">Đơn hàng</li>
             <li class="breadcrumb-item active" aria-current="page">Danh sách đơn hàng</li>
         </ol>
@@ -33,34 +33,46 @@
                                 @forelse ($orders as $order)
                                     @php $i++; @endphp
                                     <tr>
-                                        <td>{{$i}}</td>
-                                        <td>{{$order->order_code}}</td>
-                                        <td>{{$order->customer->name ?? 'N/A'}}</td>
-                                        <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                                        <td>{{ number_format($order->total, 0, ',', '.') }} đ</td>
+                                        <td><i>{{ $i }}</i></td>
+                                        <td>{{ $order->order_code }}</td>
+                                        <td>{{ $order->customer->customer_name }}
+
+                                        <td>{{ $order->order_date }}</td>
+                                        <td>{{ number_format($order->order_total) }} vnđ</td>
+                                        @if ($order->order_status == 1)
+                                            <td>
+                                                <span class="badge bg-primary">Đơn hàng mới</span>
+                                            </td>
+                                        @elseif($order->order_status == 4)
+                                            <td>
+                                                <span class="badge bg-warning">Xác nhận đơn hàng</span>
+                                            </td>
+                                        @elseif($order->order_status == 5)
+                                            <td>
+                                                <span class="badge bg-light">Đang vận chuyển</span>
+                                            </td>
+                                        @elseif($order->order_status == 3)
+                                            <td>
+                                                <span class="badge bg-danger">Đơn hàng bị hủy</span>
+                                            </td>
+                                        @elseif($order->order_status == 6)
+                                            <td>
+                                                <span class="badge bg-primary">Đơn hàng mới - Đã thanh toán</span>
+                                            </td>
+                                        @else
+                                            <td><span class="badge bg-success">Hoàn thành</span></td>
+                                        @endif
                                         <td>
-                                            @if ($order->status == 1)
-                                                <span class="badge bg-warning text-dark">Chờ xử lý</span>
-                                            @elseif ($order->status == 2)
-                                                <span class="badge bg-info">Đang giao</span>
-                                            @elseif ($order->status == 3)
-                                                <span class="badge bg-success">Hoàn thành</span>
-                                            @else
-                                                <span class="badge bg-danger">Đã hủy</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-2">
-                                                <a href="{{ route('order.show', $order->id) }}" class="btn btn-info btn-sm" title="Xem chi tiết">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <form method="POST" action="{{ route('order.delete', $order->id) }}" onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?')">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
+                                            <div style="display: flex">
+                                                <a class="btn btn-sm btn-warning" style="margin-right:10px;"
+                                                    href="{{ route('view_order', ['order_code' => $order->order_code]) }}"><i
+                                                        class="fa fa-pencil"></i></a>
+                                                @if ($order->order_status == 1)
+                                                    <a onclick="return confirm('Bạn có muốn xóa đơn hàng này không?')"
+                                                        href="{{ route('delete_order', ['order_code' => $order->order_code]) }}"
+                                                        class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
+                                                        </i></a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

@@ -126,7 +126,7 @@
             .login-container {
                 padding: 10px;
             }
-            
+
             .card-body {
                 padding: 2rem 1.5rem;
             }
@@ -137,9 +137,9 @@
 <body>
     <div class="login-container">
         <div class="text-center logo-container">
-            <img src="{{ asset('backend/assets/images/logo.png') }}" class="img-fluid" alt="Logo">
+            <img src="{{ asset('frontend/images/logo/logo.jpg') }}" class="img-fluid" alt="Logo">
         </div>
-        
+
         <div class="card">
             <div class="card-body">
                 <h4 class="text-center mb-2 fw-bold text-dark">Đăng nhập hệ thống1</h4>
@@ -157,8 +157,8 @@
                             <span class="input-group-text">
                                 <i class="bi bi-envelope text-muted"></i>
                             </span>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                                   id="email" name="email" value="{{ old('email') }}" 
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                   id="email" name="email" value="{{ old('email') }}"
                                    placeholder="Nhập email của bạn" required autofocus>
                         </div>
                         @error('email')
@@ -207,8 +207,7 @@
 
                     <div class="text-center">
                         <small class="text-muted">
-                            <i class="bi bi-question-circle me-1"></i>
-                            Quên mật khẩu? 
+                            Quên mật khẩu?
                             <a href="{{ route('password.request') }}" class="forgot-link">Lấy lại</a>
                         </small>
                     </div>

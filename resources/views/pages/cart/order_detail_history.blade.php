@@ -1,203 +1,143 @@
 @extends('layout')
 @section('content')
-    <section class="breadcrumb breadcrumb_bg">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="breadcrumb_iner">
-                        <div class="breadcrumb_iner_item">
-                            <h2>Chi tiết đơn hàng</h2>
-                            <p>Trang chủ <span>-</span>Lịch sử mua hàng</p>
-                        </div>
-                    </div>
-                </div>
+<div class="hero-wrap hero-bread" style="background-image: url('/frontend/images/bg_1.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{{ URL::to('/') }}">Trang chủ</a></span>
+                    <span class="mr-2"><a href="{{ route('history') }}">Lịch sử mua hàng</a></span>
+                    <span>Chi tiết đơn hàng</span>
+                </p>
+                <h1 class="mb-0 bread">Chi Tiết Đơn Hàng #{{ $order_details[0]->order_code }}</h1>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <section class="cart_area padding_top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="left_sidebar_area">
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Quản lý tài khoản</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li class="list-group-item border-0">
-                                        <a href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}" class="text-dark">
-                                            <i class="fas fa-user me-2"></i>Thông tin tài khoản
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item border-0">
-                                        <a href="{{ route('history') }}" class="text-dark">
-                                            <i class="fas fa-history me-2"></i>Lịch sử mua hàng
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item border-0">
-                                        <a href="{{ route('logout') }}" class="text-dark">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside>
-                    </div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar-box ftco-animate">
+                    <ul class="categories">
+                        <li><a href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i class="ion-ios-person"></i> Thông tin tài khoản</span></a></li>
+                        <li class="active"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box"></i> Lịch sử mua hàng</span></a></li>
+                        <li><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out"></i> Đăng xuất</span></a></li>
+                    </ul>
                 </div>
+            </div>
 
-                <div class="col-lg-9">
-                    <div class="cart_inner">
-                        <h3 class="mb-4 text-center">Thông tin chi tiết đơn hàng</h3>
+            <div class="col-md-9">
+                <div class="order-details-wrap p-4 bg-white ftco-animate">
 
-                        @if(session()->has('message'))
-                            <div class="alert alert-success">
-                                {!! session()->get('message') !!}
-                            </div>
-                            {{ session()->forget('message') }}
-                        @elseif(session()->has('error'))
-                            <div class="alert alert-danger">
-                                {!! session()->get('error') !!}
-                            </div>
-                            {{ session()->forget('error') }}
-                        @endif
+                    @if(session()->has('message'))
+                        <div class="alert alert-success">{!! session()->get('message') !!}</div>
+                        @php session()->forget('message'); @endphp
+                    @elseif(session()->has('error'))
+                        <div class="alert alert-danger">{!! session()->get('error') !!}</div>
+                        @php session()->forget('error'); @endphp
+                    @endif
 
-                        <div class="cart_inner">
-                            <h4>Thông tin người đặt</h4>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Tên khách hàng</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Email</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{$customer->customer_name}}</td>
-                                        <td>{{$customer->customer_phone}}</td>
-                                        <td>{{$customer->customer_email}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <h3 class="billing-heading mb-4">Thông tin giao hàng</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Người nhận:</strong> {{$shipping->shipping_name}}</p>
+                            <p><strong>Số điện thoại:</strong> {{$shipping->shipping_phone}}</p>
+                            <p><strong>Email:</strong> {{$shipping->shipping_email}}</p>
                         </div>
-
-                        <div class="cart_inner mt-4">
-                            <h4>Địa chỉ nhận hàng</h4>
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Tên người vận chuyển</th>
-                                        <th>Địa chỉ</th>
-                                        <th>Số điện thoại</th>
-                                        <th>Email</th>
-                                        <th>Ghi chú</th>
-                                        <th>Hình thức thanh toán</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{$shipping->shipping_name}}</td>
-                                        <td>{{$shipping->shipping_address}}</td>
-                                        <td>{{$shipping->shipping_phone}}</td>
-                                        <td>{{$shipping->shipping_email}}</td>
-                                        <td>{{$shipping->shipping_notes}}</td>
-                                        <td>@if($shipping->shipping_method == 1)
-                                                <span class="badge badge-warning">Tiền mặt</span>
-                                            @else
-                                                <span class="badge badge-success">Thanh toán online</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="col-md-6">
+                             <p><strong>Địa chỉ:</strong> {{$shipping->shipping_address}}</p>
+                             <p><strong>Thanh toán:</strong>
+                                @if($shipping->shipping_method == 1) Tiền mặt khi nhận hàng @else Đã thanh toán online @endif
+                             </p>
+                             <p><strong>Ghi chú:</strong> {{$shipping->shipping_notes ?? 'Không có'}}</p>
                         </div>
+                    </div>
+                    <hr>
 
-                        <div class="cart_inner mt-4">
-                            <h4>Thông tin đơn hàng</h4>
-                            <div class="table-responsive">
-                                <table class="table table-condensed table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Số lượng kho còn</th>
-                                        <th>Mã giảm giá</th>
-                                        <th>Phí ship</th>
-                                        <th>Số lượng</th>
-                                        <th>Giá sản phẩm</th>
-                                        <th>Tổng tiền</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                    <h3 class="billing-heading mb-4">Các sản phẩm đã đặt</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="thead-primary">
+                                <tr class="text-center">
+                                    <th>Sản phẩm</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tạm tính</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $total = 0; @endphp
+                                @foreach($order_details as $details)
                                     @php
-                                        $total = 0;
+                                        $subtotal = $details->product_price * $details->product_sales_quantity;
+                                        $total += $subtotal;
                                     @endphp
-                                    @foreach($order_details as $key => $details)
-                                        @php
-                                            $subtotal = $details->product_price * $details->product_sales_quantity;
-                                            $total += $subtotal;
-                                        @endphp
-                                        <tr>
-                                            <td>{{$details->product_name}}</td>
-                                            <td>{{$details->product->product_quantity}}</td>
-                                            <td>@if($details->product_coupon != 'no')
-                                                    {{$details->product_coupon}}
-                                                @else
-                                                    Không mã
-                                                @endif
-                                            </td>
-                                            <td>{{number_format($details->product_feeship ,0,',','.')}}đ</td>
-                                            <td>{{$details->product_sales_quantity}}</td>
-                                            <td>{{number_format($details->product_price ,0,',','.')}}đ</td>
-                                            <td>{{number_format($subtotal ,0,',','.')}}đ</td>
-                                        </tr>
-                                    @endforeach
-                                    <tr>
-                                        <td colspan="6" class="text-right">
-                                            @php
-                                                $total_coupon = 0;
-                                            @endphp
-                                            @if($coupon_condition == 1)
-                                                @php
-                                                    $total_after_coupon = ($total * $coupon_number) / 100;
-                                                    echo 'Tổng giảm: ' . number_format($total_after_coupon, 0, ',', '.') . ' đ<br>';
-                                                    $total_coupon = $total + $details->product_feeship - $total_after_coupon;
-                                                @endphp
-                                            @else
-                                                @php
-                                                    echo 'Tổng giảm: ' . number_format($coupon_number, 0, ',', '.') . ' đ<br>';
-                                                    $total_coupon = $total + $details->product_feeship - $coupon_number;
-                                                @endphp
-                                            @endif
-
-                                            Phí ship: {{number_format($details->product_feeship, 0, ',', '.')}}đ<br>
-                                            Thanh toán: {{number_format($total_coupon, 0, ',', '.')}}đ
+                                    <tr class="text-center">
+                                        <td class="product-name">
+                                            <h3>{{$details->product_name}}</h3>
                                         </td>
+                                        <td class="price">{{number_format($details->product_price, 0, ',', '.')}}đ</td>
+                                        <td class="quantity">{{$details->product_sales_quantity}}</td>
+                                        <td class="total">{{number_format($subtotal, 0, ',', '.')}}đ</td>
                                     </tr>
-                                    </tbody>
-                                </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row justify-content-end">
+                        <div class="col-lg-6 mt-5 cart-wrap ftco-animate">
+                            <div class="cart-total mb-3">
+                                <h3>Tổng Cộng</h3>
+                                <p class="d-flex">
+                                    <span>Tạm tính</span>
+                                    <span>{{number_format($total, 0, ',', '.')}}đ</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>Phí vận chuyển</span>
+                                    <span>{{number_format($details->product_feeship, 0, ',', '.')}}đ</span>
+                                </p>
+                                <p class="d-flex">
+                                    <span>Giảm giá (Coupon)</span>
+                                    <span>
+                                        @php $discount = 0; @endphp
+                                        @if($coupon_condition == 1)
+                                            @php
+                                                $discount = ($total * $coupon_number) / 100;
+                                                echo '- '.number_format($discount, 0, ',', '.').'đ';
+                                            @endphp
+                                        @else
+                                             @php
+                                                $discount = $coupon_number;
+                                                echo '- '.number_format($discount, 0, ',', '.').'đ';
+                                            @endphp
+                                        @endif
+                                    </span>
+                                </p>
+                                <hr>
+                                <p class="d-flex total-price">
+                                    <span>Thành tiền</span>
+                                    @php $grand_total = $total + $details->product_feeship - $discount; @endphp
+                                    <span>{{number_format($grand_total, 0, ',', '.')}}đ</span>
+                                </p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a class="btn btn-primary btn-sm" href="{{route('print_order',['order_code' => $details->order_code])}}" target="_blank">In đơn hàng</a>
-
-                            @if($order_status == 1 || $order_status == 6)
-                                <form method="POST" action="{{route('cancel_order',['order_code' => $details->order_code])}}">
-                                    @csrf
-                                    @method('post')
-                                    <button class="btn btn-danger btn-sm" type="submit">Hủy đơn hàng</button>
-                                </form>
-                            @endif
-                        </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a class="btn btn-primary btn-sm" href="{{route('print_order',['order_code' => $details->order_code])}}" target="_blank"><i class="ion-ios-print"></i> In đơn hàng</a>
+                        @if($order->order_status == 1 || $order->order_status == 4)
+                            <form method="POST" action="{{route('cancel_order',['order_code' => $details->order_code])}}" onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?');">
+                                @csrf
+                                <button class="btn btn-danger btn-sm" type="submit"><i class="ion-ios-close-circle-outline"></i> Hủy đơn hàng</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
