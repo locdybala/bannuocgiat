@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Contact extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $fillable = [
+        'info_contact',
+        'info_map',
+        'info_image',
+    ];
     protected $table = 'tbl_infomation';
     protected $primaryKey = 'info_id';
 }
