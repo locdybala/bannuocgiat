@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -77,7 +79,7 @@ class UserController extends Controller
         $data = array();
         $data['name'] = $request->name;
         $data['email'] = $request->email;
-        $data['password'] = md5($request->password);
+        $data['password'] = Hash::make($request->password);
         $data['phone'] = $request->phone;
         $data['birthday'] = $request->birthday;
         $data['address'] = $request->address;
@@ -119,7 +121,7 @@ class UserController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         if ($request->password) {
-            $data['password'] = md5($request->password);
+            $data['password'] = Hash::make($request->password);
         }
         $data['phone'] = $request->phone;
         $data['birthday'] = $request->birthday;
@@ -128,7 +130,7 @@ class UserController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         if ($request->password) {
-            $user->password = md5($data['password']);
+            $user->password = $data['password'];
         }
         $user->phone = $data['phone'];
         $user->birthday = $data['birthday'];
