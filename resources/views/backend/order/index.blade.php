@@ -67,12 +67,13 @@
                                                 <a class="btn btn-sm btn-warning" style="margin-right:10px;"
                                                     href="{{ route('view_order', ['order_code' => $order->order_code]) }}"><i
                                                         class="fa fa-pencil"></i></a>
-                                                @if ($order->order_status == 1)
-                                                    <a onclick="return confirm('Bạn có muốn xóa đơn hàng này không?')"
-                                                        href="{{ route('delete_order', ['order_code' => $order->order_code]) }}"
-                                                        class="btn btn-sm btn-danger ml-2"><i class="fa fa-trash">
-                                                        </i></a>
-                                                @endif
+                                                        @if ($order->order_status==1)
+                                                        <a onclick="return confirm('Bạn có muốn xóa đơn hàng này không?')"
+                                                           href="{{route('delete_order', ['order_code' => $order->order_code])}}"
+                                                           class="btn btn-sm btn-danger ml-2"><i
+                                                                class="fa fa-trash">
+                                                            </i></a>
+                                                    @endif
                                             </div>
                                         </td>
                                     </tr>

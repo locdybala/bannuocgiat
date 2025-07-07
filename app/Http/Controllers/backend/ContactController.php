@@ -10,17 +10,13 @@ use Illuminate\Support\Facades\Session;
 
 class ContactController extends Controller
 {
-    public function index()
-    {
-        $contact = Contact::first();
-        return view('backend.contact.index', compact('contact'));
-    }
+
 
     public function create()
     {
         $title = 'Cấu hình website';
-        $contact = Contact::first();
-        return view('backend.contact.update', compact('contact', 'title'));
+        $contactUpdate = Contact::first();
+        return view('backend.contact.update', compact('contactUpdate', 'title'));
     }
 
     public function update(Request $request, $id)

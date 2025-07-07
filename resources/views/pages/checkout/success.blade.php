@@ -33,7 +33,7 @@
                             <h5 class="text-center">Vui lòng quét mã QR dưới đây để thanh toán, ghi rõ mã đơn hàng
                                 <strong>#{{ $order->order_code }}</strong> trong nội dung chuyển khoản.</h5>
                             <img class="mx-auto d-block" style="width: 200px; height: 200px;"
-                                src="{{ asset('frontend/img/maqr.png') }}" alt="Mã QR thanh toán">
+                                src="{{ asset('frontend/images/maqr.png') }}" alt="Mã QR thanh toán">
                         </div>
                     @endif
 
