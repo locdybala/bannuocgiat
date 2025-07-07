@@ -65,7 +65,8 @@
             <div class="col-md-12 ftco-animate">
                 <h3 class="billing-heading mb-4">Thông tin thêm</h3>
                 <div class="info-extra bg-white p-4 rounded">
-                    {!! $contact->info_contact !!}
+
+                    {!! $contactUpdate->info_contact !!}
                 </div>
             </div>
         </div>
