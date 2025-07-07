@@ -1,4 +1,5 @@
 @extends('layout')
+@section('title', 'Trang tĩnh')
 @section('content')
     <style>
         /* CSS cho khu vực nội dung được render từ database */

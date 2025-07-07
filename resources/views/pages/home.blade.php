@@ -1,4 +1,5 @@
 @extends('layout')
+@section('title', 'Trang chủ')
 @section('content')
     @if (isset($sliders) && count($sliders) > 0)
         <section id="home-section" class="hero">

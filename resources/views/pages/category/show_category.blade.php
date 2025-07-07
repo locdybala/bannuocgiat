@@ -1,4 +1,5 @@
 @extends('layout')
+@section('title', 'Sản phẩm theo danh mục')
 @section('content')
 
 <div class="hero-wrap hero-bread" style="background-image: url('/frontend/images/bg_1.jpg');">

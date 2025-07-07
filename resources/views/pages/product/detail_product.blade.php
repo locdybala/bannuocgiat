@@ -1,4 +1,5 @@
 @extends('layout')
+@section('title', 'Chi tiết sản phẩm')
 @section('content')
     @php
         $customerId = Session::get('customer_id');

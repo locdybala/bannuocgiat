@@ -1,4 +1,5 @@
 @extends('layout')
+@section('title', 'Sản phẩm')
 @section('content')
 
     <section class="breadcrumb breadcrumb_bg">
