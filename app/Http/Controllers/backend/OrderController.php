@@ -406,10 +406,7 @@ class OrderController extends Controller
             }
 
             // Kiểm tra trạng thái đơn hàng - chỉ cho phép xóa đơn hàng mới (status = 1)
-            if ($order->order_status != 1) {
-                Session::put('error', 'Chỉ có thể xóa đơn hàng mới');
-                return redirect()->route('all_order');
-            }
+    
 
             // Xóa chi tiết đơn hàng trước
             OrderDetails::where('order_code', $order_code)->delete();
