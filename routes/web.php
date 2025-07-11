@@ -96,7 +96,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/unactive_category/{id}', [CategoryController::class, 'unactive_category'])->name('unactive_category');
         Route::get('/active_category/{id}', [CategoryController::class, 'active_category'])->name('active_category');
         Route::post('/updateCategory/{id}', [CategoryController::class, 'update'])->name('update_category');
-        Route::get('/deleteCategory/{id}', [CategoryController::class, 'delete'])->name('deleteCategory');
+        Route::delete('/deleteCategory/{id}', [CategoryController::class, 'delete'])->name('deleteCategory');
     });
 
     Route::prefix('brand')->group(function () {
@@ -107,7 +107,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/unactive_brand/{id}', [BrandController::class, 'unactive_brand'])->name('unactive_brand');
         Route::get('/active_brand/{id}', [BrandController::class, 'active_brand'])->name('active_brand');
         Route::post('/updateBrand/{id}', [BrandController::class, 'update'])->name('update_brand');
-        Route::get('/deleteBrand/{id}', [BrandController::class, 'delete'])->name('deleteBrand');
+        Route::delete('/deleteBrand/{id}', [BrandController::class, 'delete'])->name('deleteBrand');
     });
 
     Route::prefix('product')->group(function () {
@@ -119,7 +119,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/active_product/{id}', [ProductController::class, 'active_product'])->name('active_product');
         Route::post('/updateproduct/{id}', [ProductController::class, 'update'])->name('update_product');
         Route::post('/reply_comment', [ProductController::class, 'reply_comment'])->name('reply_comment');
-        Route::get('/deleteProduct/{id}', [ProductController::class, 'delete'])->name('deleteproduct');
+        Route::delete('/deleteProduct/{id}', [ProductController::class, 'delete'])->name('deleteproduct');
     });
     Route::prefix('infomation')->group(function () {
         Route::get('/add_infomation', [ContactController::class, 'create'])->name('add_infomation');
@@ -158,7 +158,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/unactive_slider/{id}', [SliderController::class, 'unactive_slider'])->name('unactive_slider');
         Route::get('/active_slider/{id}', [SliderController::class, 'active_slider'])->name('active_slider');
         Route::post('/updateslider/{id}', [SliderController::class, 'update'])->name('update_slider');
-        Route::get('/deleteslider/{id}', [SliderController::class, 'delete'])->name('deleteslider');
+        Route::delete('/deleteslider/{id}', [SliderController::class, 'delete'])->name('deleteslider');
     });
 
     Route::prefix('coupon')->group(function () {
@@ -167,7 +167,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/updatecoupon/{id}', [CouponController::class, 'edit'])->name('updatecoupon');
         Route::post('/addcoupon', [CouponController::class, 'store'])->name('addcoupon');
         Route::post('/updatecoupon/{id}', [CouponController::class, 'update'])->name('update_coupon');
-        Route::get('/deletecoupon/{id}', [CouponController::class, 'delete'])->name('deletecoupon');
+        Route::delete('/deletecoupon/{id}', [CouponController::class, 'delete'])->name('deletecoupon');
     });
 
     Route::prefix('fee')->group(function () {

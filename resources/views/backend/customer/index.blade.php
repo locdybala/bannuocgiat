@@ -23,12 +23,12 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>STT</th>
-                                    <th>Họ tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Thao tác</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Địa chỉ email</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,17 +37,11 @@
                                     @php $i++; @endphp
                                     <tr>
                                         <td>{{$i}}</td>
-                                        <td>{{$customer->customer_name}}</td>
-                                        <td>{{$customer->customer_email}}</td>
-                                        <td>{{$customer->customer_phone}}</td>
-                                        <td>
-                                            @if ($customer->customer_status == 1)
-                                                <span class="badge bg-success">Hoạt động</span>
-                                            @else
-                                                <span class="badge bg-secondary">Khóa</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $customer->created_at }}</td>
+                                                <td>{{ $customer->customer_name }}</td>
+                                                <td>{{ $customer->customer_email }}</td>
+                                                <td>{{$customer->customer_birthday}}</td>
+                                                <td>{{$customer->customer_phone}}</td>
+                                                <td>{{ $customer->customer_address }}</td>
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <a class="btn btn-sm btn-warning"

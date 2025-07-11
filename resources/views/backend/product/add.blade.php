@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="product_tags" class="form-label">Tag sản phẩm</label>
-                                <input type="text" data-role="tagsinput" class="form-control" id="product_tags" name="product_tags" placeholder="Nhập tag, cách nhau bởi dấu phẩy"/>
+                                <input type="text" class="form-control" id="product_tags" name="product_tags" placeholder="Nhập tag, cách nhau bởi dấu phẩy"/>
                             </div>
                             <div class="col-md-6">
                                 <label for="category_id" class="form-label">Danh mục sản phẩm <span class="text-danger">*</span></label>
