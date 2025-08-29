@@ -13,11 +13,10 @@
             <!-- About Detergent Shop & Social Icons -->
             <div class="col-md">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">SOFTWAVE SHOP</h2>
-                    <p>SoftWave Shop chuyên cung cấp các sản phẩm bột giặt và nước xả vải chất lượng cao, an toàn cho sức khỏe và môi trường.</p>
+                    <h2 class="ftco-heading-2">Tine Shop</h2>
+                    <p>Tine Shop chuyên cung cấp các sản phẩm đồ dùng học tập chất lượng cao, tiện lợi và phù hợp cho học sinh, sinh viên.</p>
                     <!-- Newsletter description -->
-                    <p>Nhận thông tin khuyến mãi và sản phẩm mới nhất về bột giặt và nước xả vải của chúng tôi.</p>
-
+                    <p>Nhận thông tin khuyến mãi và sản phẩm mới nhất về đồ dùng học tập từ chúng tôi.</p>
                 </div>
             </div>
 
@@ -59,9 +58,9 @@
                     <h2 class="ftco-heading-2">Có câu hỏi?</h2>
                     <div class="block-23 mb-3">
                         <ul>
-                            <li><span class="icon icon-map-marker"></span><span class="text">Địa chỉ cửa hàng: 175 P. Tây Sơn, Trung Liệt, Đống Đa, Hà Nội 116705</span></li>
+                            <li><span class="icon icon-map-marker"></span><span class="text">Địa chỉ cửa hàng: 31 P. Phan Đình Giót, Phương Liệt, Thanh Xuân, Hà Nội</span></li>
                             <li><a href="#"><span class="icon icon-phone"></span><span class="text">Tư vấn mua hàng: 0388181970</span></a></li>
-                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">Email: info@detergentshop.com</span></a></li>
+                            <li><a href="#"><span class="icon icon-envelope"></span><span class="text">Email: tineshop@gmail.com</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -71,7 +70,7 @@
             <div class="col-md-12 text-center">
                 <p>
                     <!-- Original copyright from old footer -->
-                    &copy; <script>document.write(new Date().getFullYear());</script> Công ty bán bột giặt và nước xả vải | Thiết kế bởi <a href="#">Nguyễn Đình Kiên</a>
+                    &copy; <script>document.write(new Date().getFullYear());</script>Cửa hàng bán đồ dùng học tập | Thiết kế bởi <a href="#">Nguyễn Trần Tiên</a>
                     <!-- Template attribution from new footer -->
                 </p>
             </div>

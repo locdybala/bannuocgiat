@@ -46,8 +46,8 @@
                             <span class="flaticon-diet"></span>
                         </div>
                         <div class="media-body">
-                            <h3 class="heading">Hương Thơm Bền Lâu</h3>
-                            <span>Công nghệ lưu hương độc quyền</span>
+                            <h3 class="heading">Đáp ứng đủ nhu cầu</h3>
+                            <span>Đa dạng mặt hàng, đáp ứng tốt nhu cầu</span>
                         </div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="media-body">
                             <h3 class="heading">Chất Lượng Vượt Trội</h3>
-                            <span>Sạch sâu, an toàn cho da tay</span>
+                            <span>Đồ dùng uy tin, chất lượng sô 1</span>
                         </div>
                     </div>
                 </div>
