@@ -217,11 +217,11 @@
                                             @endphp
                                             @if ($customerId)
                                                 {{-- Nút Thêm giỏ hàng cho người đã đăng nhập (dùng cho AJAX) --}}
-                                                <button type="button" name="add-to-cart"
+                                                <a href="javascript:;" name="add-to-cart"
                                                     data-id_product="{{ $product->product_id }}"
                                                     class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
                                                     <span><i class="ion-ios-cart"></i></span>
-                                                </button>
+                                            </a>
                                             @else
                                                 {{-- Nút Thêm giỏ hàng chuyển đến trang đăng nhập --}}
                                                 <a href="{{ URL::to('/login-checkout') }}"
@@ -340,11 +340,11 @@
                                             @endphp
                                             @if ($customerId)
                                                 {{-- Nút Thêm giỏ hàng cho người đã đăng nhập (dùng cho AJAX) --}}
-                                                <button type="button" name="add-to-cart"
+                                                <a href="javascript:;" name="add-to-cart"
                                                     data-id_product="{{ $product->product_id }}"
                                                     class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
                                                     <span><i class="ion-ios-cart"></i></span>
-                                                </button>
+                                                </a>
                                             @else
                                                 {{-- Nút Thêm giỏ hàng chuyển đến trang đăng nhập --}}
                                                 <a href="{{ URL::to('/login-checkout') }}"
@@ -400,8 +400,9 @@
 @section('javascript')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('.add-to-cart').click(function() {
-                debugger;
+            $('.add-to-cart').click(function(e) {
+                e.preventDefault(); // Prevent default anchor tag behavior
+                e.stopPropagation(); // Stop event bubbling
                 var id = $(this).data('id_product');
                 var cart_product_id = $('.cart_product_id_' + id).val();
                 var cart_product_name = $('.cart_product_name_' + id).val();
@@ -437,8 +438,8 @@
                                     cancelButtonText: "Xem tiếp",
                                     dangerMode: true,
                                 })
-                                .then((willDelete) => {
-                                    if (willDelete) {
+                                .then((result) => {
+                                    if (result.isConfirmed) {
                                         window.location.href = "{{ url('/cart') }}";
                                     }
                                 });

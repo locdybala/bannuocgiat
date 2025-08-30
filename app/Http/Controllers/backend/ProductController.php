@@ -27,6 +27,21 @@ class ProductController extends Controller
 
     }
 
+    public function search(Request $request)
+    {
+        $title = 'Kết quả tìm kiếm sản phẩm';
+        $query = $request->input('query');
+
+        $products = Product::orderByDesc('product_id')
+            ->where('product_name', 'LIKE', '%' . $query . '%')
+            ->paginate(15);
+        
+        // Append the search query to pagination links
+        $products->appends(['query' => $query]);
+
+        return view('backend.product.index', compact('products', 'title'));
+    }
+
     public function create()
     {
         $title = 'Thêm sản phẩm';

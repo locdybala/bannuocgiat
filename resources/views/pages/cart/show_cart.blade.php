@@ -151,7 +151,18 @@
                                 <span><strong>Thành tiền</strong></span>
                                 <span><strong>
                                         @if (Session::get('coupon'))
-                                            @php $total_coupon = $total - $cou['coupon_price']; @endphp
+                                            @php
+                                                $total_coupon = 0;
+                                                if ($cou['coupon_condition'] == 1) { // Percentage discount
+                                                    $total_coupon = $total - ($total * $cou['coupon_number']) / 100;
+                                                } else { // Fixed amount discount
+                                                    $total_coupon = $total - $cou['coupon_number'];
+                                                }
+                                                // Ensure total_coupon doesn't go below zero
+                                                if ($total_coupon < 0) {
+                                                    $total_coupon = 0;
+                                                }
+                                            @endphp
                                             {{ number_format($total_coupon, 0, ',', '.') }}đ
                                         @else
                                             {{ number_format($total, 0, ',', '.') }}đ

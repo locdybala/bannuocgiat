@@ -29,7 +29,7 @@ class ContactController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('upload/info'), $filename);
+            $file->move(public_path('frontend/images/logo'), $filename);
             $contact->info_image = $filename;
         }
         if ($contact->save()) {

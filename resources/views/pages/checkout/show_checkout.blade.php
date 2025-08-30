@@ -148,15 +148,31 @@
                                             @foreach (Session::get('coupon') as $key => $cou)
                                                 <p class="d-flex">
                                                     <span>Giảm giá (Coupon)</span>
-                                                    <span>-{{ number_format($cou['coupon_price'], 0, ',', '.') }}đ</span>
+                                                    @if ($cou['coupon_condition'] == 1)
+                                                        <span>{{ $cou['coupon_number'] }}%</span>
+                                                    @else
+                                                        <span>{{ number_format($cou['coupon_number'], 0, ',', '.') }}đ</span>
+                                                    @endif
                                                 </p>
                                             @endforeach
                                         @endif
                                         <hr>
                                         @php
                                             $fee = Session::get('fee', 0);
-                                            $coupon_price = Session::get('coupon')[0]['coupon_price'] ?? 0;
-                                            $total_after = $total + $fee - $coupon_price;
+                                            $coupon_value = 0;
+                                            if (Session::has('coupon') && count(Session::get('coupon')) > 0) {
+                                                $cou = Session::get('coupon')[0];
+                                                if ($cou['coupon_condition'] == 1) { // Percentage discount
+                                                    $coupon_value = ($total * $cou['coupon_number']) / 100;
+                                                } else { // Fixed amount discount
+                                                    $coupon_value = $cou['coupon_number'];
+                                                }
+                                            }
+                                            $total_after = $total + $fee - $coupon_value;
+                                            // Ensure total_after doesn't go below zero
+                                            if ($total_after < 0) {
+                                                $total_after = 0;
+                                            }
                                         @endphp
                                         <p class="d-flex total-price">
                                             <span>Tổng cộng</span>

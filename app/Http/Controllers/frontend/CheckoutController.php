@@ -52,7 +52,7 @@ class CheckoutController extends Controller
         $slider = Slider::where('slider_status', '1')->take(4)->get();
         $pages = Pages::all();
         Session::forget('customer_id');
-        Session::forget('customer_picture');
+        Session::forget('customer_avatar');
         Session::forget('customer_name');
         Session::forget('coupon');
 
@@ -113,7 +113,7 @@ class CheckoutController extends Controller
         }
         if ($result) {
             Session::put('customer_id', $result->customer_id);
-            Session::put('customer_picture', $result->customer_picture);
+            Session::put('customer_avatar', $result->customer_avatar);
             Session::put('customer_name', $result->customer_name);
             $cart = Session::get('cart');
 

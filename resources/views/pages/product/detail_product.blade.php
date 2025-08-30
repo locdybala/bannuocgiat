@@ -242,6 +242,31 @@
 @section('javascript')
     <script type="text/javascript">
         $(document).ready(function() {
+            // Quantity Increment/Decrement
+            $('.quantity-right-plus').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var quantity_input = $(this).closest('.input-group').find('.input-number');
+                var current_quantity = parseInt(quantity_input.val());
+                var max_quantity = parseInt(quantity_input.attr('max'));
+
+                if (current_quantity < max_quantity) {
+                    quantity_input.val(current_quantity + 1);
+                }
+            });
+
+            $('.quantity-left-minus').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var quantity_input = $(this).closest('.input-group').find('.input-number');
+                var current_quantity = parseInt(quantity_input.val());
+
+                if (current_quantity > 1) {
+                    quantity_input.val(current_quantity - 1);
+                }
+            });
+
+            // Load Comments
             loadComments();
 
             function loadComments() {
@@ -260,6 +285,7 @@
                 })
             }
 
+            // Send Comment
             $('.send-comment').click(function() {
                 var product_id = $('#comment_product_id').val();
                 var comment_name = $('#comment_name').val();
@@ -278,7 +304,7 @@
                     success: function(data) {
                         $('#notifi_comments').html(
                             '<span class="text text-success">Thêm bình luận thành công, bình luận đang được chờ duyệt</span>'
-                            );
+                        );
                         loadComments();
                         $('#notifi_comments').fadeOut('slow');
                         $('#comment_name').val('');
@@ -286,15 +312,8 @@
                     }
                 })
             })
-        });
-    </script>
-@endsection
-@section('javascript')
-    <script type="text/javascript">
-        $('.number-increment').click(function() {
-            alert(1);
-        })
-        $(document).ready(function() {
+
+            // Add to Cart
             $('.add-to-cart').click(function() {
                 debugger;
                 var id = $(this).data('id_product');
@@ -323,7 +342,6 @@
                             _token: _token
                         },
                         success: function() {
-
                             Swal.fire({
                                 title: "Đã thêm sản phẩm vào giỏ hàng",
                                 text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
@@ -338,50 +356,60 @@
                                 }
                             });
                         }
-
                     });
                 }
-            })
-        });
-    </script>
-    <script>
-        < script >
-            $(document).ready(function() {
-                // Chọn đúng class của slider và gọi hàm owlCarousel()
-                $('.product-img-slider').owlCarousel({
-                    loop: true, // Lặp lại slider
-                    margin: 10, // Khoảng cách giữa các ảnh
-                    nav: true, // Hiển thị nút điều hướng (prev/next)
-                    dots: true, // Hiển thị dấu chấm
-                    responsive: {
-                        0: {
-                            items: 1 // Hiển thị 1 ảnh trên màn hình nhỏ
-                        },
-                        600: {
-                            items: 1 // Hiển thị 1 ảnh trên màn hình tablet
-                        },
-                        1000: {
-                            items: 1 // Hiển thị 1 ảnh trên màn hình lớn
-                        }
+            });
+
+            // Owl Carousel for product images
+            $('.product-img-slider').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 1
+                    },
+                    1000: {
+                        items: 1
+                    }
+                }
+            });
+
+            // Star Rating Logic
+            const stars = $('#rating_stars .star');
+            const ratingValueInput = $('#rating_value');
+            const ratingText = $('#rating_text');
+
+            function highlightStars(rating) {
+                stars.each(function() {
+                    if (parseInt($(this).data('rating')) <= rating) {
+                        $(this).find('span').removeClass('ion-ios-star-outline').addClass('ion-ios-star');
+                    } else {
+                        $(this).find('span').removeClass('ion-ios-star').addClass('ion-ios-star-outline');
                     }
                 });
+            }
+
+            stars.on('mouseover', function() {
+                const rating = $(this).data('rating');
+                highlightStars(rating);
             });
+
+            stars.on('mouseout', function() {
+                const currentRating = ratingValueInput.val() || 0;
+                highlightStars(parseInt(currentRating));
+            });
+
+            stars.on('click', function() {
+                const rating = $(this).data('rating');
+                ratingValueInput.val(rating);
+                ratingText.text(`Bạn đã chọn ${rating} sao.`);
+                highlightStars(rating);
+            });
+        });
     </script>
-
-    // --- 2. LOGIC CHO CHỨC NĂNG ĐÁNH GIÁ SAO ---
-    const stars = $('#rating_stars .star');
-    const ratingValueInput = $('#rating_value');
-    const ratingText = $('#rating_text');
-
-    // Hàm để tô màu các ngôi sao
-    function highlightStars(rating) {
-    stars.each(function() {
-    if (parseInt($(this).data('rating')) <= rating) {
-        $(this).find('span').removeClass('ion-ios-star-outline').addClass('ion-ios-star'); } else {
-        $(this).find('span').removeClass('ion-ios-star').addClass('ion-ios-star-outline'); } }); } // Sự kiện khi di chuột
-        qua stars.on('mouseover', function() { const rating=$(this).data('rating'); highlightStars(rating); }); // Sự kiện
-        khi rời chuột stars.on('mouseout', function() { const currentRating=ratingValueInput.val() || 0;
-        highlightStars(parseInt(currentRating)); }); // Sự kiện khi click chọn sao stars.on('click', function() { const
-        rating=$(this).data('rating'); ratingValueInput.val(rating); ratingText.text(`Bạn đã chọn ${rating} sao.`);
-        highlightStars(rating); }); </script>
-    @endsection
+@endsection
