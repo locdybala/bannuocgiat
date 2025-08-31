@@ -11,7 +11,7 @@
                     <div class="col-md pr-4 d-flex topper align-items-center">
                         <div class="icon mr-2 d-flex justify-content-center align-items-center"><span
                                 class="fas fa-envelope"></span></div>
-                        <span class="text">info@detergentshop.com</span>
+                        <span class="text">tineshop@gmail.com</span>
                     </div>
                     <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
                         <span class="text">Giao hàng 3-5 ngày làm việc &amp; Đổi trả miễn phí</span>
