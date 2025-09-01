@@ -170,7 +170,7 @@
         <div class="container">
             <div class="row">
                 {{-- Bắt đầu vòng lặp sản phẩm --}}
-                @foreach ($products as $product)
+                @foreach ($productSolds as $product)
                     <div class="col-md-6 col-lg-3 ftco-animate">
                         {{-- Mở Form cho từng sản phẩm để dùng cho AJAX Add to Cart --}}
                         <form>

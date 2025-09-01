@@ -14,7 +14,8 @@
                     <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Thêm mới bài viết</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('add_post') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                @include('backend.components.notification')
+                    <form action="{{ route('addPost') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                         @csrf
                         <div class="mb-3">
                             <label for="post_title" class="form-label">Tiêu đề <span class="text-danger">*</span></label>
@@ -40,6 +41,14 @@
                         <div class="mb-3">
                             <label for="post_desc" class="form-label">Mô tả ngắn</label>
                             <textarea id="post_desc" class="form-control" name="post_desc" rows="3" placeholder="Mô tả ngắn về bài viết"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="meta_desc" class="form-label">Meta Description</label>
+                            <textarea id="meta_desc" class="form-control" name="meta_desc" rows="3" placeholder="Meta Description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="meta_keywords" class="form-label">Meta Keywords</label>
+                            <textarea id="meta_keywords" class="form-control" name="meta_keywords" rows="3" placeholder="Meta Keywords"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="post_content" class="form-label">Nội dung <span class="text-danger">*</span></label>

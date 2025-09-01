@@ -23,7 +23,7 @@ class HomeController extends Controller
         $category = Category::where('category_status', '1')->orderby('category_id', 'desc')->get();
         $brand = Brand::where('brand_status', '1')->orderby('brand_id', 'desc')->get();
         $productNews = Product::where('product_status', '1')->orderby('product_id', 'desc')->limit(6)->get();
-        $productSolds = Product::where('product_status', '1')->orderby('product_sold', 'desc')->limit(9)->get();
+        $productSolds = Product::where('product_status', '1')->orderby('product_sold', 'desc')->limit(12)->get();
         $productLimit = Product::where('product_status', '1')->orderby('product_price', 'desc')->limit(1)->first();
         $productView = Product::where('product_status', '1')->orderby('product_view', 'desc')->limit(1)->first();
         $bestSellers = Product::latest()->limit(4)->get();
