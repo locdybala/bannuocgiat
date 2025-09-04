@@ -21,19 +21,30 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="sidebar-box ftco-animate">
-                        <ul class="categories">
-                            {{-- Dùng icon ion-ios-... của theme Vegefoods --}}
-                            <li><a href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i
-                                            class="ion-ios-person"></i> Thông tin tài khoản</span></a></li>
-                            {{-- Đánh dấu active cho trang hiện tại --}}
-                            <li class="active"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box"></i> Lịch
-                                        sử mua hàng</span></a></li>
-                            <li><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out"></i> Đăng xuất</span></a>
+                        <div class="profile-info text-center mb-4">
+                            <div class="profile-avatar mb-2">
+                                @if (Session::get('customer_avatar'))
+                                    <img src="{{ asset('upload/customer/' . Session::get('customer_avatar')) }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @else
+                                    {{-- Ảnh mặc định nếu người dùng chưa có avatar --}}
+                                    <img src="{{ asset('frontend/images/default-avatar.png') }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @endif
+                            </div>
+                            <h5 class="profile-name">{{ Session::get('customer_name') }}</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item {{ Request::is('edit-customer/*') ? 'active' : '' }}"><a
+                                    href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i
+                                            class="ion-ios-person mr-2"></i> Thông tin tài khoản</span></a></li>
+                            <li class="list-group-item {{ Request::is('history') ? 'active' : '' }}"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box mr-2"></i> Lịch sử mua
+                                        hàng</span></a></li>
+                            <li class="list-group-item"><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out mr-2"></i> Đăng xuất</span></a>
                             </li>
                         </ul>
                     </div>
                 </div>
-
                 <div class="col-md-9">
                     <div class="order-history-wrap p-4 bg-white ftco-animate">
                         <h3 class="mb-4 billing-heading">Các đơn hàng đã đặt</h3>

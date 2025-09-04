@@ -73,17 +73,15 @@
                                         </a>
                                         @php $customerId = Session::get('customer_id'); @endphp
                                         @if ($customerId)
-                                        <button type="button" name="add-to-cart" data-id_product="{{$product->product_id}}" class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <a href="#" name="add-to-cart" data-id_product="{{$product->product_id}}" class="add-to-cart buy-now d-flex justify-content-center align-items-center mx-1">
                                             <span><i class="ion-ios-cart"></i></span>
-                                        </button>
+                                        </a>
                                         @else
                                         <a href="{{URL::to('/login-checkout')}}" class="buy-now d-flex justify-content-center align-items-center mx-1">
                                             <span><i class="ion-ios-cart"></i></span>
                                         </a>
                                         @endif
-                                        <a href="#" class="heart d-flex justify-content-center align-items-center">
-                                            <span><i class="ion-ios-heart"></i></span>
-                                        </a>
+                                    
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +142,9 @@
             });
 
             // Add to cart functionality
-            $('.add-to-cart').click(function () {
+            $('.add-to-cart').click(function (e) {
+                e.preventDefault(); // Prevent default anchor tag behavior
+                e.stopPropagation(); // Stop event bubbling
                 debugger;
                 var id = $(this).data('id_product');
                 var cart_product_id = $('.cart_product_id_' + id).val();
@@ -155,7 +155,7 @@
                 var cart_product_qty = $('.cart_product_qty_' + id).val();
                 var _token = $('input[name="_token"]').val();
                 if (cart_product_qty >= cart_product_quantity) {
-                    swal('error', 'Số lượng đặt lớn hơn số lượng còn trong kho, Vui lòng chọn số lượng nhỏ hơn', +cart_product_quantity);
+                    Swal.fire('error', 'Số lượng đặt lớn hơn số lượng còn trong kho, Vui lòng chọn số lượng nhỏ hơn', +cart_product_quantity);
                 } else {
                     $.ajax({
                         url: '{{url('/add-cart-ajax')}}',
@@ -170,7 +170,7 @@
                             _token: _token
                         },
                         success: function () {
-                            swal({
+                            Swal.fire({
                                 title: "Đã thêm sản phẩm vào giỏ hàng",
                                 text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
                                 cancel: "Xem tiếp",

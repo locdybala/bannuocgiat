@@ -18,11 +18,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="sidebar-box ftco-animate">
+                <div class="sidebar-box ftco-animate">
                         <div class="profile-info text-center mb-4">
                             <div class="profile-avatar mb-2">
-                                @if ($customer->customer_avatar)
-                                    <img src="{{ asset('upload/customer/' . $customer->customer_avatar) }}" alt="Avatar"
+                                @if (Session::get('customer_avatar'))
+                                    <img src="{{ asset('upload/customer/' . Session::get('customer_avatar')) }}" alt="Avatar"
                                         class="rounded-circle" width="100" height="100">
                                 @else
                                     {{-- Ảnh mặc định nếu người dùng chưa có avatar --}}
@@ -30,16 +30,15 @@
                                         class="rounded-circle" width="100" height="100">
                                 @endif
                             </div>
-                            <h5 class="profile-name">{{ $customer->customer_name }}</h5>
+                            <h5 class="profile-name">{{ Session::get('customer_name') }}</h5>
                         </div>
-                        <ul class="categories">
-                            {{-- Dùng icon ion-ios-... của theme Vegefoods --}}
-                            <li class="active"><a
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item {{ Request::is('edit-customer/*') ? 'active' : '' }}"><a
                                     href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i
-                                            class="ion-ios-person"></i> Thông tin tài khoản</span></a></li>
-                            <li><a href="{{ route('history') }}"><span><i class="ion-ios-list-box"></i> Lịch sử mua
+                                            class="ion-ios-person mr-2"></i> Thông tin tài khoản</span></a></li>
+                            <li class="list-group-item {{ Request::is('history') ? 'active' : '' }}"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box mr-2"></i> Lịch sử mua
                                         hàng</span></a></li>
-                            <li><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out"></i> Đăng xuất</span></a>
+                            <li class="list-group-item"><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out mr-2"></i> Đăng xuất</span></a>
                             </li>
                         </ul>
                     </div>
@@ -56,7 +55,7 @@
                         @endif
 
                         {{-- Giữ nguyên action và enctype --}}
-                        <form action="{{ route('addCustomer') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('edit_customer', ['id' => $customer->customer_id]) }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-md-6 form-group">
@@ -87,9 +86,13 @@
                                         value="{{ $customer->customer_address }}">
                                 </div>
                                 <div class="w-100"></div>
-                                <div class="col-md-12 form-group">
+                                <div class="col-md-6 form-group">
                                     <label for="customer_avatar">Thay đổi ảnh đại diện</label>
                                     <input type="file" name="customer_avatar" class="form-control-file">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="customer_avatar">Ngày sinh</label>
+                                    <input type="date" name="customer_birthday" class="form-control" value="{{ $customer->customer_birthday }}">
                                 </div>
                                 <div class="w-100"></div>
                                 <div class="col-md-12">

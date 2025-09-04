@@ -13,6 +13,10 @@
                 <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <h5 class="mb-0">Danh sách sản phẩm</h5>
                     <div class="d-flex gap-2 flex-wrap">
+                        <form action="{{ route('search_product') }}" method="GET" class="d-flex">
+                            <input type="text" name="query" class="form-control form-control-sm me-2" placeholder="Tìm kiếm sản phẩm..." value="{{ request('query') }}">
+                            <button type="submit" class="btn btn-secondary btn-sm"><i class="bi bi-search"></i></button>
+                        </form>
                         <a href="{{ route('add_product') }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle me-1"></i> Thêm sản phẩm
                         </a>

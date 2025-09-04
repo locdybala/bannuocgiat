@@ -20,13 +20,30 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <div class="sidebar-box ftco-animate">
-                    <ul class="categories">
-                        <li><a href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i class="ion-ios-person"></i> Thông tin tài khoản</span></a></li>
-                        <li class="active"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box"></i> Lịch sử mua hàng</span></a></li>
-                        <li><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out"></i> Đăng xuất</span></a></li>
-                    </ul>
-                </div>
+            <div class="sidebar-box ftco-animate">
+                        <div class="profile-info text-center mb-4">
+                            <div class="profile-avatar mb-2">
+                                @if (Session::get('customer_avatar'))
+                                    <img src="{{ asset('upload/customer/' . Session::get('customer_avatar')) }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @else
+                                    {{-- Ảnh mặc định nếu người dùng chưa có avatar --}}
+                                    <img src="{{ asset('frontend/images/default-avatar.png') }}" alt="Avatar"
+                                        class="rounded-circle" width="100" height="100">
+                                @endif
+                            </div>
+                            <h5 class="profile-name">{{ Session::get('customer_name') }}</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item {{ Request::is('edit-customer/*') ? 'active' : '' }}"><a
+                                    href="{{ URL::to('/edit-customer/' . Session::get('customer_id')) }}"><span><i
+                                            class="ion-ios-person mr-2"></i> Thông tin tài khoản</span></a></li>
+                            <li class="list-group-item {{ Request::is('history') ? 'active' : '' }}"><a href="{{ route('history') }}"><span><i class="ion-ios-list-box mr-2"></i> Lịch sử mua
+                                        hàng</span></a></li>
+                            <li class="list-group-item"><a href="{{ route('logout') }}"><span><i class="ion-ios-log-out mr-2"></i> Đăng xuất</span></a>
+                            </li>
+                        </ul>
+                    </div>
             </div>
 
             <div class="col-md-9">
@@ -62,6 +79,7 @@
                         <table class="table">
                             <thead class="thead-primary">
                                 <tr class="text-center">
+                                    <th>STT</th>
                                     <th>Sản phẩm</th>
                                     <th>Đơn giá</th>
                                     <th>Số lượng</th>
@@ -69,13 +87,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $total = 0; @endphp
+                                @php $total = 0; $i = 0; @endphp
                                 @foreach($order_details as $details)
                                     @php
+                                        $i++;
                                         $subtotal = $details->product_price * $details->product_sales_quantity;
                                         $total += $subtotal;
                                     @endphp
                                     <tr class="text-center">
+                                        <td>{{ $i }}</td>
                                         <td class="product-name">
                                             <h3>{{$details->product_name}}</h3>
                                         </td>
@@ -85,51 +105,41 @@
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-right"><strong>Tổng tiền hàng</strong></td>
+                                    <td class="text-right"><strong>{{number_format($total, 0, ',', '.')}}đ</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-right">Phí vận chuyển</td>
+                                    <td class="text-right">{{number_format($details->product_feeship, 0, ',', '.')}}đ</td>
+                                </tr>
+                                @php
+                                    $discount = 0;
+                                    if ($coupon_condition == 1) {
+                                        $discount = ($total * $coupon_number) / 100;
+                                    } else {
+                                        $discount = $coupon_number;
+                                    }
+                                    $grand_total = $total + $details->product_feeship - $discount;
+                                @endphp
+                                <tr>
+                                    <td colspan="4" class="text-right">Giảm giá
+                                        @if($coupon_condition == 1) ({{$coupon_number}}%) @endif
+                                    </td>
+                                    <td class="text-right">- {{number_format($discount, 0, ',', '.')}}đ</td>
+                                </tr>
+                                <tr class="total-price">
+                                    <td colspan="4" class="text-right"><strong>Tổng thanh toán</strong></td>
+                                    <td class="text-right"><strong>{{number_format($grand_total, 0, ',', '.')}}đ</strong></td>
+                                </tr>
+                            </tfoot>
                         </table>
-                    </div>
-
-                    <div class="row justify-content-end">
-                        <div class="col-lg-6 mt-5 cart-wrap ftco-animate">
-                            <div class="cart-total mb-3">
-                                <h3>Tổng Cộng</h3>
-                                <p class="d-flex">
-                                    <span>Tạm tính</span>
-                                    <span>{{number_format($total, 0, ',', '.')}}đ</span>
-                                </p>
-                                <p class="d-flex">
-                                    <span>Phí vận chuyển</span>
-                                    <span>{{number_format($details->product_feeship, 0, ',', '.')}}đ</span>
-                                </p>
-                                <p class="d-flex">
-                                    <span>Giảm giá (Coupon)</span>
-                                    <span>
-                                        @php $discount = 0; @endphp
-                                        @if($coupon_condition == 1)
-                                            @php
-                                                $discount = ($total * $coupon_number) / 100;
-                                                echo '- '.number_format($discount, 0, ',', '.').'đ';
-                                            @endphp
-                                        @else
-                                             @php
-                                                $discount = $coupon_number;
-                                                echo '- '.number_format($discount, 0, ',', '.').'đ';
-                                            @endphp
-                                        @endif
-                                    </span>
-                                </p>
-                                <hr>
-                                <p class="d-flex total-price">
-                                    <span>Thành tiền</span>
-                                    @php $grand_total = $total + $details->product_feeship - $discount; @endphp
-                                    <span>{{number_format($grand_total, 0, ',', '.')}}đ</span>
-                                </p>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <a class="btn btn-primary btn-sm" href="{{route('print_order',['order_code' => $details->order_code])}}" target="_blank"><i class="ion-ios-print"></i> In đơn hàng</a>
-                        @if($order->order_status == 1 || $order->order_status == 4)
+                        @if($order[0]->order_status == 1 || $order[0]->order_status == 4)
                             <form method="POST" action="{{route('cancel_order',['order_code' => $details->order_code])}}" onsubmit="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?');">
                                 @csrf
                                 <button class="btn btn-danger btn-sm" type="submit"><i class="ion-ios-close-circle-outline"></i> Hủy đơn hàng</button>

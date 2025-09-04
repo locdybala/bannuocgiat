@@ -67,8 +67,14 @@
                         <a class="nav-link" href="{{URL::to('/login-checkout')}}">Thanh toán</a>
                     </li>
                 @endif
+                @php
+                $cart = collect(Session::get('cart', []));  
+
+// Tính tổng số lượng sản phẩm trong giỏ hàng
+$totalQuantity = $cart->sum('product_qty');
+                @endphp
                 <li class="nav-item cta cta-colored"><a href="{{route('cart')}}" class="nav-link"><span
-                    class="icon-shopping_cart"></span>[0]</a></li>
+                    class="icon-shopping_cart"></span><span style="color:red; font-weight:bold;">({{$totalQuantity}})</span></a></li>
 
             </ul>
         </div>
@@ -76,7 +82,14 @@
         <!-- Right side icons: Search and User Profile -->
         <div class="hearer_icon d-flex">
             <!-- Search Icon and Input Box -->
-            <a id="search_1" href="javascript:void(0)" class="nav-link"><i class="ti-search"></i></a>
+            <div id="fullscreen_search_modal" class="fullscreen-search-modal">
+                <button type="button" class="close-search-modal">&times;</button>
+                <form action="{{ route('frontend_search_product') }}" method="GET" class="search-modal-form">
+                    <input type="text" name="query" id="search_input_modal" placeholder="Tìm kiếm sản phẩm..." value="{{ request('query') }}" autofocus>
+                    <button type="submit" class="search-modal-button"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <a id="search_1" href="javascript:void(0)" class="nav-link"><i class="fas fa-search"></i></a>
 
             <!-- User Profile/Login -->
             @if($customer_id != NULL)

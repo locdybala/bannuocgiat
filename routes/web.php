@@ -44,6 +44,7 @@ Route::get('/', function () {
 });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('search', [HomeController::class, 'search'])->name('search');
+Route::get('/frontend_search_product', [HomeController::class, 'searchProduct'])->name('frontend_search_product');
 
 
 //Frontend
@@ -72,6 +73,7 @@ Route::post('/check_coupon', [CartController::class, 'check_coupon'])->name('che
 Route::get('/delete_coupon', [CartController::class, 'delete_coupon'])->name('delete_coupon');
 Route::get('/history', [CartController::class, 'history'])->name('history');
 Route::get('/view-order-history/{order_code}', [CartController::class, 'view_order_history'])->name('view_order_history');
+Route::post('/update-customer/{id}', [CustomerController::class, 'updateFrontend']); // New route for frontend customer update
 Route::get('/payment-success', [CheckoutController::class, 'paymentSuccess'])->name(('payment-success'));
 Route::get('/onepay/response', [CheckoutController::class, 'onepayResponse'])->name('onepay.response');
 
@@ -118,13 +120,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/unactive_product/{id}', [ProductController::class, 'unactive_product'])->name('unactive_product');
         Route::get('/active_product/{id}', [ProductController::class, 'active_product'])->name('active_product');
         Route::post('/updateproduct/{id}', [ProductController::class, 'update'])->name('update_product');
+        Route::get('/search_product', [ProductController::class, 'search'])->name('search_product'); // New route for product search
         Route::post('/reply_comment', [ProductController::class, 'reply_comment'])->name('reply_comment');
         Route::delete('/deleteProduct/{id}', [ProductController::class, 'delete'])->name('deleteproduct');
     });
     Route::prefix('infomation')->group(function () {
-        Route::get('/add_infomation', [ContactController::class, 'create'])->name('add_infomation');
-        Route::post('/updateinfomation/{id}', [ContactController::class, 'update'])->name('update_info');
-        Route::get('/deletecontact/{id}', [ContactController::class, 'delete'])->name('deletecontact');
+        Route::get('/add_infomation', [\App\Http\Controllers\backend\ContactController::class, 'create'])->name('add_infomation');
+        Route::post('/updateinfomation/{id}', [\App\Http\Controllers\backend\ContactController::class, 'update'])->name('update_info');
+        Route::get('/deletecontact/{id}', [\App\Http\Controllers\backend\ContactController::class, 'delete'])->name('deletecontact');
     });
     Route::prefix('comment')->group(function () {
         Route::get('/all_comment', [ProductController::class, 'index_comment'])->name('index_comment');

@@ -39,6 +39,26 @@ class HomeController extends Controller
             'title', 'productNews', 'pages', 'productSolds', 'categories', 'coupon', 'bestSellers'));
     }
 
+    public function searchProduct(Request $request)
+    {
+        $title = 'Kết quả tìm kiếm sản phẩm';
+        $query = $request->input('query');
+
+        $category = Category::where('category_status', '1')->orderby('category_id', 'desc')->get();
+        $brand = Brand::where('brand_status', '1')->orderby('brand_id', 'desc')->get();
+        $categorypost = CategoryPost::where('cate_post_status', '1')->orderby('cate_post_id', 'desc')->get();
+        $pages = Pages::all();
+        $slider = Slider::where('slider_status', '1')->take(4)->get();
+
+        $products = Product::where('product_status', '1')
+            ->where('product_name', 'LIKE', '%' . $query . '%')
+            ->paginate(12);
+
+        $products->appends(['query' => $query]);
+
+        return view('pages.product.search_results', compact('category', 'brand', 'products', 'categorypost', 'title', 'pages', 'query', 'slider'));
+    }
+
     public function shop()
     {
         $title = 'Danh sách sản phẩm';
