@@ -121,16 +121,34 @@ class OrderController extends Controller
 		}
 		.table-styling{
 			border:1px solid #000;
+			width:100%;
+			border-collapse:collapse;
 		}
-		.table-styling tbody tr td{
+		.table-styling tbody tr td, .table-styling thead tr th{
 			border:1px solid #000;
+			padding:8px;
+		}
+		.title-invoice{
+			text-align: center;
+			margin-bottom: 20px;
+		}
+		.section-header{
+			font-weight: bold;
+			margin-top: 20px;
+			margin-bottom: 10px;
+			background-color: #f2f2f2;
+			padding: 5px;
 		}
 		</style>
-		<h2><center>Cộng hòa xã hội chủ nghĩa Việt Nam</center></h2>
-		<h4><center>Độc lập - Tự do - Hạnh phúc</center></h4>
-		<h1><center>Cửa hàng Điện thoại</center></h1>
+		<div class="title-invoice">
+			
+			
+			<h1><center>Tine Shop</center></h1>
+			<p>Mã hóa đơn: ' . $checkout_code . '</p>
+			<p>Ngày lập: ' . date('d/m/Y') . '</p>
+		</div>
 
-		<p>Người đặt hàng</p>
+		<p class="section-header">Thông tin khách hàng</p>
 		<table class="table-styling">
 				<thead>
 					<tr>
@@ -155,7 +173,7 @@ class OrderController extends Controller
 
 		</table>
 
-		<p>Ship hàng tới</p>
+		<p class="section-header">Thông tin vận chuyển</p>
 			<table class="table-styling">
 				<thead>
 					<tr>
@@ -184,7 +202,7 @@ class OrderController extends Controller
 
 		</table>
 
-		<p>Đơn hàng đặt</p>
+		<p class="section-header">Chi tiết đơn hàng</p>
 			<table class="table-styling">
 				<thead>
 					<tr>
@@ -231,10 +249,11 @@ class OrderController extends Controller
         }
 
         $output .= '<tr>
-				<td colspan="2">
+				<td colspan="3">
+					<p>Tổng tiền hàng: ' . number_format($total, 0, ',', '.') . 'đ</p>
 					<p>Tổng giảm: ' . $coupon_echo . '</p>
 					<p>Phí ship: ' . number_format($product->product_feeship, 0, ',', '.') . 'đ' . '</p>
-					<p>Thanh toán : ' . number_format($total_coupon + $product->product_feeship, 0, ',', '.') . 'đ' . '</p>
+					<p>Tổng thanh toán : ' . number_format($total_coupon + $product->product_feeship, 0, ',', '.') . 'đ' . '</p>
 				</td>
 		</tr>';
         $output .= '
@@ -242,18 +261,20 @@ class OrderController extends Controller
 
 		</table>
 
-		<p>Ký tên</p>
-			<table>
+		<p class="section-header">Ký tên</p>
+			<table class="table-styling">
 				<thead>
 					<tr>
-						<th width="200px">Người lập phiếu</th>
-						<th width="800px">Người nhận</th>
+						<th width="50%">Người lập phiếu</th>
+						<th width="50%">Người nhận</th>
 
 					</tr>
 				</thead>
-				<tbody>';
-
-        $output .= '
+				<tbody>
+					<tr>
+						<td style="height:80px; text-align:center; vertical-align:bottom;">(Ký và ghi rõ họ tên)</td>
+						<td style="height:80px; text-align:center; vertical-align:bottom;">(Ký và ghi rõ họ tên)</td>
+					</tr>
 				</tbody>
 
 		</table>

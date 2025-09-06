@@ -21,23 +21,23 @@ class PostController extends Controller
     public function create()
     {
         $title = 'Thêm bài viết';
-        $category = CategoryPost::all();
-        return view('backend.post.add', compact('category','title'));
+        $categories = CategoryPost::all();
+        return view('backend.post.add', compact('categories','title'));
     }
 
     public function store(Request $request)
     {
 
         $data = array();
-        $data['post_title'] = $request->title;
-        $data['cate_post_id'] = $request->category_id;
-        $data['post_description'] = $request->description;
-        $data['post_content'] = $request->contents;
+        $data['post_title'] = $request->post_title;
+        $data['cate_post_id'] = $request->cate_post_id;
+        $data['post_description'] = $request->post_desc;
+        $data['post_content'] = $request->post_content;
         $data['meta_desc'] = $request->meta_desc;
         $data['meta_keywords'] = $request->meta_keywords;
-        $data['post_slug'] = $request->slug;
-        $data['post_status'] = $request->status;
-        $file = $request->file('image');
+        $data['post_slug'] = $request->post_slug;
+        $data['post_status'] = $request->post_status;
+        $file = $request->file('post_image');
         if ($file) {
             $getnameimage = $file->getClientOriginalName();
             $nameimage = current(explode('.', $getnameimage));
@@ -45,7 +45,7 @@ class PostController extends Controller
             $file->move('upload/post', $new_image);
             $data['post_image'] = $new_image;
             Post::create($data);
-            Session::put('message', 'Thêm bài viết thành công');
+            Session::put('success', 'Thêm bài viết thành công');
             return redirect()->route('all_post');
 
         } else {
@@ -79,22 +79,22 @@ class PostController extends Controller
     {
         $title = 'Sửa bài viết';
         $post = Post::find($id);
-        $category = CategoryPost::all();
-        return view('backend.post.update', compact('post', 'category','title'));
+        $categories = CategoryPost::all();
+        return view('backend.post.update', compact('post', 'categories','title'));
     }
 
     public function update(Request $request, $id)
     {
         $data = array();
-        $data['post_title'] = $request->title;
-        $data['cate_post_id'] = $request->category_id;
-        $data['post_description'] = $request->description;
-        $data['post_content'] = $request->contents;
+        $data['post_title'] = $request->post_title;
+        $data['cate_post_id'] = $request->cate_post_id;
+        $data['post_description'] = $request->post_desc;
+        $data['post_content'] = $request->post_content;
         $data['meta_desc'] = $request->meta_desc;
         $data['meta_keywords'] = $request->meta_keywords;
-        $data['post_slug'] = $request->slug;
-        $data['post_status'] = $request->status;
-        $file = $request->file('image');
+        $data['post_slug'] = $request->post_slug;
+        $data['post_status'] = $request->post_status;
+        $file = $request->file('post_image');
         if ($file) {
             $getnameimage = $file->getClientOriginalName();
             $nameimage = current(explode('.', $getnameimage));
